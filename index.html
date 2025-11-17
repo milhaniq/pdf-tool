@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Merger & Splitter</title>
+    <title>PDF Tools Suite</title>
     <!-- Using a production-friendly Tailwind CSS build -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
     <script>
@@ -18,6 +18,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <!-- JSZip for creating zip files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- PDF.js for PDF to PPT conversion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- PptxGenJS for creating PowerPoint files -->
+    <script src="https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <style>
         .sortable-ghost {
             opacity: 0.4;
@@ -46,8 +50,8 @@
     <main class="flex-grow flex items-center justify-center p-4">
         <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-2xl">
             <header class="text-center mb-8">
-                <h1 class="text-4xl font-bold text-gray-800">PDF Merger & Splitter</h1>
-                <p class="text-gray-500 mt-2">Combine multiple PDFs into a single document or split a PDF into individual pages.</p>
+                <h1 class="text-4xl font-bold text-gray-800">PDF Tools Suite</h1>
+                <p class="text-gray-500 mt-2">Merge, split, or convert PDFs to PowerPoint presentations.</p>
             </header>
 
             <!-- Mode Selection Tabs -->
@@ -57,6 +61,9 @@
                 </button>
                 <button id="split-tab" class="mode-tab flex-1 py-2 text-center font-medium text-gray-700 hover:text-blue-600 focus:outline-none">
                     Split PDF
+                </button>
+                <button id="ppt-tab" class="mode-tab flex-1 py-2 text-center font-medium text-gray-700 hover:text-blue-600 focus:outline-none">
+                    PDF to PPT
                 </button>
             </div>
 
@@ -156,6 +163,72 @@
                 </div>
             </div>
 
+            <!-- PDF to PPT Mode Content -->
+            <div id="ppt-content" class="hidden">
+                <!-- Drag and Drop Area for PPT -->
+                <div id="ppt-drop-zone" class="border-3 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer transition hover:border-blue-500 hover:bg-blue-50">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <p class="mt-4 text-lg text-gray-600">Drag & drop your PDF file here</p>
+                    <p class="text-sm text-gray-500">or click to browse</p>
+                    <input type="file" id="ppt-file-input" accept=".pdf" class="hidden">
+                </div>
+
+                <!-- File Info -->
+                <div class="mt-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-lg font-medium text-gray-700">File Information</h3>
+                        <button id="ppt-clear" class="text-sm text-red-600 hover:text-red-800 hidden">Clear</button>
+                    </div>
+                    <div id="ppt-file-info" class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-500 text-center py-4">No file uploaded yet</p>
+                    </div>
+                </div>
+
+                <!-- Conversion Options -->
+                <div class="mt-6">
+                    <h3 class="text-lg font-medium text-gray-700 mb-2">Conversion Options</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="preserve-aspect" checked class="mr-2">
+                            <span>Preserve aspect ratio</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="high-quality" checked class="mr-2">
+                            <span>High quality conversion (slower)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div id="ppt-progress-container" class="mt-6 hidden">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-lg font-medium text-gray-700">Conversion Progress</h3>
+                        <span id="ppt-progress-text" class="text-sm text-gray-500">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="ppt-progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons for PPT -->
+                <div class="mt-8 flex justify-center items-center space-x-4">
+                    <button id="ppt-btn" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
+                        Convert to PPT
+                    </button>
+                    <div id="ppt-loader" class="hidden">
+                        <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                    <a id="ppt-download-link" class="hidden bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-green-700 transition" download="presentation.pptx">
+                        Download PowerPoint
+                    </a>
+                </div>
+            </div>
+
             <!-- Error Message -->
             <div id="error-message" class="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg hidden">
                 <p class="text-sm font-medium">Error:</p>
@@ -170,24 +243,42 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Set the worker source for PDF.js. This is required for it to function.
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            
             // Mode switching
             const mergeTab = document.getElementById('merge-tab');
             const splitTab = document.getElementById('split-tab');
+            const pptTab = document.getElementById('ppt-tab');
             const mergeContent = document.getElementById('merge-content');
             const splitContent = document.getElementById('split-content');
+            const pptContent = document.getElementById('ppt-content');
             
             mergeTab.addEventListener('click', () => {
                 mergeTab.classList.add('active');
                 splitTab.classList.remove('active');
+                pptTab.classList.remove('active');
                 mergeContent.classList.remove('hidden');
                 splitContent.classList.add('hidden');
+                pptContent.classList.add('hidden');
             });
             
             splitTab.addEventListener('click', () => {
                 splitTab.classList.add('active');
                 mergeTab.classList.remove('active');
+                pptTab.classList.remove('active');
                 splitContent.classList.remove('hidden');
                 mergeContent.classList.add('hidden');
+                pptContent.classList.add('hidden');
+            });
+            
+            pptTab.addEventListener('click', () => {
+                pptTab.classList.add('active');
+                mergeTab.classList.remove('active');
+                splitTab.classList.remove('active');
+                pptContent.classList.remove('hidden');
+                mergeContent.classList.add('hidden');
+                splitContent.classList.add('hidden');
             });
             
             // Split option change handler
@@ -597,6 +688,176 @@
                 }
                 
                 return ranges;
+            }
+            
+            // PDF to PPT functionality
+            const pptDropZone = document.getElementById('ppt-drop-zone');
+            const pptFileInput = document.getElementById('ppt-file-input');
+            const pptFileInfo = document.getElementById('ppt-file-info');
+            const pptBtn = document.getElementById('ppt-btn');
+            const pptLoader = document.getElementById('ppt-loader');
+            const pptDownloadLink = document.getElementById('ppt-download-link');
+            const pptClearBtn = document.getElementById('ppt-clear');
+            const pptProgressContainer = document.getElementById('ppt-progress-container');
+            const pptProgressBar = document.getElementById('ppt-progress-bar');
+            const pptProgressText = document.getElementById('ppt-progress-text');
+            
+            let pptUploadedFile = null;
+            let pptBlobUrl = null;
+            
+            // Event listeners for PPT
+            pptDropZone.addEventListener('click', () => pptFileInput.click());
+            
+            pptDropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                pptDropZone.classList.add('border-blue-500', 'bg-blue-50');
+            });
+            
+            pptDropZone.addEventListener('dragleave', () => {
+                pptDropZone.classList.remove('border-blue-500', 'bg-blue-50');
+            });
+            
+            pptDropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                pptDropZone.classList.remove('border-blue-500', 'bg-blue-50');
+                handlePptFile(e.dataTransfer.files[0]);
+            });
+            
+            pptFileInput.addEventListener('change', (e) => {
+                handlePptFile(e.target.files[0]);
+            });
+            
+            pptClearBtn.addEventListener('click', () => {
+                resetPptState();
+            });
+            
+            pptBtn.addEventListener('click', convertToPpt);
+            
+            // Reset PPT state
+            function resetPptState() {
+                pptUploadedFile = null;
+                pptFileInfo.innerHTML = '<p class="text-gray-500 text-center py-4">No file uploaded yet</p>';
+                pptBtn.disabled = true;
+                pptClearBtn.classList.add('hidden');
+                pptDownloadLink.classList.add('hidden');
+                pptProgressContainer.classList.add('hidden');
+                if (pptBlobUrl) {
+                    URL.revokeObjectURL(pptBlobUrl);
+                    pptBlobUrl = null;
+                }
+                // Reset file input
+                pptFileInput.value = '';
+            }
+            
+            // Handle uploaded file for PPT
+            async function handlePptFile(file) {
+                if (!file || file.type !== 'application/pdf') {
+                    showError('Please select a valid PDF file.');
+                    return;
+                }
+                
+                try {
+                    pptUploadedFile = file;
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                    
+                    // Display file info
+                    const pageCount = pdf.numPages;
+                    pptFileInfo.innerHTML = `
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            <div>
+                                <p class="font-medium text-gray-800">${file.name}</p>
+                                <p class="text-xs text-gray-500">${formatFileSize(file.size)} • ${pageCount} page${pageCount !== 1 ? 's' : ''}</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    pptBtn.disabled = false;
+                    pptClearBtn.classList.remove('hidden');
+                    pptDownloadLink.classList.add('hidden');
+                } catch (error) {
+                    console.error('Error reading PDF:', error);
+                    showError('Failed to read the PDF file. It might be corrupted or password-protected.');
+                }
+            }
+            
+            // Convert PDF to PPT
+            async function convertToPpt() {
+                if (!pptUploadedFile) return;
+                
+                pptBtn.disabled = true;
+                pptLoader.classList.remove('hidden');
+                pptDownloadLink.classList.add('hidden');
+                pptProgressContainer.classList.remove('hidden');
+                
+                try {
+                    const arrayBuffer = await pptUploadedFile.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                    const numPages = pdf.numPages;
+                    
+                    const preserveAspect = document.getElementById('preserve-aspect').checked;
+                    const highQuality = document.getElementById('high-quality').checked;
+                    const scale = highQuality ? 2 : 1.5;
+                    
+                    const pptx = new PptxGenJS();
+                    pptx.defineLayout({ name:'A4', width:10, height:7.5 });
+                    pptx.layout = 'A4';
+                    
+                    for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                        // Update progress
+                        const progress = Math.round((pageNum / numPages) * 100);
+                        pptProgressBar.style.width = `${progress}%`;
+                        pptProgressText.textContent = `${progress}%`;
+                        
+                        const page = await pdf.getPage(pageNum);
+                        const viewport = page.getViewport({ scale });
+                        
+                        // Create a canvas to render the PDF page
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        
+                        await page.render({ canvasContext: context, viewport: viewport }).promise;
+                        const imgData = canvas.toDataURL('image/png');
+                        
+                        // Add slide and image to the presentation
+                        const slide = pptx.addSlide();
+                        
+                        if (preserveAspect) {
+                            slide.addImage({
+                                data: imgData,
+                                x: 0, y: 0,
+                                w: '100%', h: '100%',
+                                sizing: { type: 'contain', w: 10, h: 7.5 }
+                            });
+                        } else {
+                            slide.addImage({
+                                data: imgData,
+                                x: 0, y: 0,
+                                w: 10, h: 7.5
+                            });
+                        }
+                    }
+                    
+                    // Finalize progress
+                    pptProgressBar.style.width = '100%';
+                    pptProgressText.textContent = '100%';
+                    
+                    // Generate and download the PPT file
+                    const fileName = `${pptUploadedFile.name.replace('.pdf', '')}.pptx`;
+                    await pptx.writeFile({ fileName });
+                    
+                    pptLoader.classList.add('hidden');
+                } catch (error) {
+                    console.error('Error converting to PPT:', error);
+                    showError(error.message || 'An error occurred while converting the PDF to PowerPoint. Please try again.');
+                    pptLoader.classList.add('hidden');
+                    pptBtn.disabled = false;
+                }
             }
             
             // Initialize
