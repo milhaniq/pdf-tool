@@ -1,48 +1,135 @@
-# 📄 PDF Merger & Splitter
+# 📄 PDF Tools Suite
 
-A simple and intuitive **web-based PDF tool** built using **HTML**, **Tailwind CSS**, and **JavaScript** that allows users to **merge multiple PDF files into one** or **split a single PDF into separate pages or page ranges** — all client-side with **no server upload required**.
+A powerful, browser-based toolkit to **merge, split, and convert PDF files to PowerPoint (PPTX)** — all client-side, with no server uploads required.
+Built using **HTML, TailwindCSS, JavaScript, PDF-Lib, PDF.js, JSZip, SortableJS, and PptxGenJS**.
 
 ---
 
 ## 🚀 Features
 
-- 🔗 **Merge PDFs:**  
-  Combine multiple PDF files into a single document.  
-  - Drag & drop files  
-  - Reorder files easily with drag handles  
-  - Download the merged result instantly  
+### ✅ **Merge PDFs**
 
-- ✂️ **Split PDFs:**  
-  Split a PDF into:  
-  - Individual pages  
-  - Custom page ranges (e.g. `1-5, 6-10`)  
-  - Get all outputs in a ZIP file  
+* Drag & drop multiple PDF files
+* Reorder files easily using drag-and-drop
+* Clear individual files or all at once
+* Download merged PDF instantly
 
-- 💾 **Completely client-side:**  
-  No uploads, no servers — your files never leave your device.
+### ✂️ **Split PDF**
 
-- 🎨 **Beautiful UI:**  
-  Built with **Tailwind CSS**, featuring responsive design and smooth transitions.
+* Upload a single PDF
+* Split into:
+
+  * Individual pages
+  * Specific page ranges (e.g., `1-3, 5, 7-10`)
+* Export results as a ZIP file
+
+### 🔁 **PDF → PPTX Converter**
+
+* Convert PDF pages into high-quality PowerPoint slides
+* Optional:
+
+  * **Preserve aspect ratio**
+  * **High-quality rendering**
+* Live progress bar
+* Download as `.pptx`
+
+### 🔐 **100% Client-Side**
+
+All processing happens inside the browser.
+No files are uploaded, stored, or sent to any server.
 
 ---
 
-## 🧰 Tech Stack
+## 🛠️ Technologies Used
 
-| Technology | Purpose |
-|-------------|----------|
-| **HTML5** | Structure of the application |
-| **Tailwind CSS** | Responsive and modern styling |
-| **JavaScript (Vanilla)** | Frontend logic |
-| **[PDF-Lib](https://github.com/Hopding/pdf-lib)** | PDF merging & splitting |
-| **[SortableJS](https://github.com/SortableJS/Sortable)** | Drag & drop reordering |
-| **[JSZip](https://stuk.github.io/jszip/)** | ZIP file creation for split pages |
+| Library / Tool  | Purpose                                |
+| --------------- | -------------------------------------- |
+| **TailwindCSS** | UI styling                             |
+| **PDF-Lib**     | Merging & splitting PDFs               |
+| **SortableJS**  | Drag-and-drop file ordering            |
+| **JSZip**       | Creating ZIP archives for split files  |
+| **PDF.js**      | Rendering PDF pages for PPT conversion |
+| **PptxGenJS**   | Generating PowerPoint presentations    |
 
 ---
 
-## 💻 Live Demo
+## 📦 Installation (Local Development)
 
-You can host this file directly using **GitHub Pages** or any static hosting service.  
-Just open the `index.html` file in your browser.
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/pdf-tools-suite.git
+```
+
+2. Open the project folder:
+
+```bash
+cd pdf-tools-suite
+```
+
+3. Launch the app by opening `index.html` in any modern browser.
+
+✔ **No build steps needed**
+✔ **No dependencies to install**
+
+---
+
+## 🧰 Project Structure
+
+```
+/
+├── index.html        # Main application (all logic included)
+├── README.md         # Documentation
+└── /assets           # (Optional) Add icons, images, etc.
+```
+
+---
+
+## 🧪 How It Works (Technical Summary)
+
+### PDF Merge
+
+* Reads all files using `File.arrayBuffer()`
+* Uses **PDF-Lib** to load each document and copy pages into a new PDF
+* Creates a downloadable Blob using `URL.createObjectURL()`
+
+### PDF Split
+
+* Loads the uploaded PDF using **PDF-Lib**
+* Creates separate PDFs for pages or ranges
+* Packages output using **JSZip**
+
+### PDF → PPTX Conversion
+
+* Renders each page as a canvas image using **PDF.js**
+* Inserts each image as a slide in **PptxGenJS**
+* Exports the `.pptx` file client-side
+
+---
+
+## ⚠️ Limitations
+
+* Password-protected or corrupted PDFs may fail to load
+* Very large PDFs may cause high memory usage in the browser
+* PowerPoint quality depends on screen resolution and rendering settings
+
+---
+
+Libraries used:
+
+* [PDF-Lib](https://pdf-lib.js.org/)
+* [PDF.js](https://mozilla.github.io/pdf.js/)
+* [JSZip](https://stuk.github.io/jszip/)
+* [SortableJS](https://sortablejs.github.io/Sortable/)
+* [PptxGenJS](https://gitbrent.github.io/PptxGenJS/)
+
+---
+
+## 📄 License
+
+This project is open source under the **MIT License**.
+Feel free to use, modify, and distribute.
+
 
 ---
 
