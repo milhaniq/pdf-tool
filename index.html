@@ -3,15 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Tools Suite</title>
+    <title>PDF Tools Suite - Modern</title>
     <!-- Using a production-friendly Tailwind CSS build -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
     <script>
-        // Disable Tailwind's warning in production
         tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        gray: {
+                            50: '#f9fafb',
+                            100: '#f3f4f6',
+                            200: '#e5e7eb',
+                            300: '#d1d5db',
+                            400: '#9ca3af',
+                            500: '#6b7280',
+                            600: '#4b5563',
+                            700: '#374151',
+                            800: '#1f2937',
+                            900: '#111827',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            },
             production: true
         }
     </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- PDF-lib for PDF manipulation -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <!-- SortableJS for drag and drop functionality -->
@@ -23,632 +69,948 @@
     <!-- PptxGenJS for creating PowerPoint files -->
     <script src="https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .modern-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+        
+        .modern-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.06);
+        }
+        
+        .modern-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .modern-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .modern-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .modern-tab {
+            position: relative;
+            padding: 12px 24px;
+            font-weight: 500;
+            color: #6b7280;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .modern-tab:hover {
+            color: #374151;
+        }
+        
+        .modern-tab.active {
+            color: #667eea;
+        }
+        
+        .modern-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .drop-zone {
+            border: 2px dashed #e5e7eb;
+            border-radius: 16px;
+            padding: 48px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f9fafb;
+        }
+        
+        .drop-zone:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .drop-zone.drag-over {
+            border-color: #667eea;
+            background: #e0e7ff;
+            transform: scale(1.02);
+        }
+        
+        .file-item {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .file-item:hover {
+            background: #f3f4f6;
+            transform: translateX(4px);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
         .sortable-ghost {
             opacity: 0.4;
-            background: #f0f9ff;
+            background: #e0e7ff;
         }
+        
         .sortable-drag {
             opacity: 0.9;
         }
+        
         .drag-handle {
             cursor: grab;
         }
+        
         .drag-handle:active {
             cursor: grabbing;
         }
-        .mode-tab {
-            transition: all 0.3s ease;
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
         }
-        .mode-tab.active {
-            border-bottom: 3px solid #3b82f6;
-            color: #3b82f6;
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .notification.success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .notification.error {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .notification.info {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .warning-message {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 16px;
+            margin-top: 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col font-sans">
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 opacity-5">
+        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23000000" fill-opacity="0.1"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    </div>
 
-    <main class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-2xl">
-            <header class="text-center mb-8">
-                <h1 class="text-4xl font-bold text-gray-800">PDF Tools Suite</h1>
-                <p class="text-gray-500 mt-2">Merge, split, or convert PDFs to PowerPoint presentations.</p>
+    <main class="relative z-10 flex-grow flex items-center justify-center p-4">
+        <div class="modern-card w-full max-w-4xl p-8">
+            <!-- Header -->
+            <header class="text-center mb-10">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mb-4 floating-icon">
+                    <i data-lucide="file-text" class="w-10 h-10 text-white"></i>
+                </div>
+                <h1 class="text-4xl font-bold gradient-text mb-2">PDF Tools Suite</h1>
+                <p class="text-gray-600 text-lg">Transform your PDFs with powerful, modern tools</p>
             </header>
 
             <!-- Mode Selection Tabs -->
-            <div class="flex border-b border-gray-200 mb-6">
-                <button id="merge-tab" class="mode-tab active flex-1 py-2 text-center font-medium text-gray-700 hover:text-blue-600 focus:outline-none">
-                    Merge PDFs
-                </button>
-                <button id="split-tab" class="mode-tab flex-1 py-2 text-center font-medium text-gray-700 hover:text-blue-600 focus:outline-none">
-                    Split PDF
-                </button>
-                <button id="ppt-tab" class="mode-tab flex-1 py-2 text-center font-medium text-gray-700 hover:text-blue-600 focus:outline-none">
-                    PDF to PPT
-                </button>
+            <div class="flex justify-center mb-8">
+                <div class="inline-flex bg-gray-100 rounded-xl p-1">
+                    <button id="merge-tab" class="modern-tab active rounded-lg">
+                        <span class="flex items-center gap-2">
+                            <i data-lucide="merge" class="w-4 h-4"></i>
+                            Merge
+                        </span>
+                    </button>
+                    <button id="split-tab" class="modern-tab rounded-lg">
+                        <span class="flex items-center gap-2">
+                            <i data-lucide="scissors" class="w-4 h-4"></i>
+                            Split
+                        </span>
+                    </button>
+                    <button id="ppt-tab" class="modern-tab rounded-lg">
+                        <span class="flex items-center gap-2">
+                            <i data-lucide="presentation" class="w-4 h-4"></i>
+                            Convert
+                        </span>
+                    </button>
+                </div>
             </div>
 
             <!-- Merge Mode Content -->
             <div id="merge-content">
-                <!-- Drag and Drop Area for Merge -->
-                <div id="merge-drop-zone" class="border-3 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer transition hover:border-blue-500 hover:bg-blue-50">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <p class="mt-4 text-lg text-gray-600">Drag & drop your PDF files here</p>
-                    <p class="text-sm text-gray-500">or click to browse</p>
-                    <input type="file" id="merge-file-input" accept=".pdf" multiple class="hidden">
-                </div>
-
-                <!-- File List -->
-                <div class="mt-6">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-lg font-medium text-gray-700">Files (drag to reorder)</h3>
-                        <button id="merge-clear-all" class="text-sm text-red-600 hover:text-red-800 hidden">Clear All</button>
+                <div class="space-y-6">
+                    <!-- Drag and Drop Area -->
+                    <div id="merge-drop-zone" class="drop-zone">
+                        <div class="floating-icon mb-4">
+                            <i data-lucide="upload-cloud" class="w-16 h-16 text-indigo-400 mx-auto"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Drop your PDF files here</h3>
+                        <p class="text-gray-500 mb-4">or click to browse from your computer</p>
+                        <input type="file" id="merge-file-input" accept=".pdf" multiple class="hidden">
+                        <div class="flex justify-center gap-2">
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">PDF</span>
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Multiple files</span>
+                        </div>
                     </div>
-                    <div id="merge-file-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
-                </div>
 
-                <!-- Action Buttons for Merge -->
-                <div class="mt-8 flex justify-center items-center space-x-4">
-                    <button id="merge-btn" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
-                        Merge PDFs
-                    </button>
-                    <div id="merge-loader" class="hidden">
-                        <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
+                    <!-- File List -->
+                    <div id="merge-file-section" class="hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Files to merge</h3>
+                            <button id="merge-clear-all" class="text-red-500 hover:text-red-700 transition">
+                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <div id="merge-file-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
                     </div>
-                    <a id="merge-download-link" class="hidden bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-green-700 transition" download="merged.pdf">
-                        Download Merged PDF
-                    </a>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-center items-center gap-4">
+                        <button id="merge-btn" class="modern-button" disabled>
+                            <span class="flex items-center gap-2">
+                                <i data-lucide="combine" class="w-5 h-5"></i>
+                                Merge PDFs
+                            </span>
+                        </button>
+                        <div id="merge-loader" class="hidden">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                        </div>
+                        <a id="merge-download-link" class="hidden modern-button bg-green-500 hover:bg-green-600">
+                            <span class="flex items-center gap-2">
+                                <i data-lucide="download" class="w-5 h-5"></i>
+                                Download
+                            </span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- Split Mode Content -->
             <div id="split-content" class="hidden">
-                <!-- Drag and Drop Area for Split -->
-                <div id="split-drop-zone" class="border-3 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer transition hover:border-blue-500 hover:bg-blue-50">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <p class="mt-4 text-lg text-gray-600">Drag & drop your PDF file here</p>
-                    <p class="text-sm text-gray-500">or click to browse</p>
-                    <input type="file" id="split-file-input" accept=".pdf" class="hidden">
-                </div>
-
-                <!-- File Info -->
-                <div class="mt-6">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-lg font-medium text-gray-700">File Information</h3>
-                        <button id="split-clear" class="text-sm text-red-600 hover:text-red-800 hidden">Clear</button>
-                    </div>
-                    <div id="split-file-info" class="bg-gray-50 p-4 rounded-lg">
-                        <p class="text-gray-500 text-center py-4">No file uploaded yet</p>
-                    </div>
-                </div>
-
-                <!-- Split Options -->
-                <div class="mt-6">
-                    <h3 class="text-lg font-medium text-gray-700 mb-2">Split Options</h3>
-                    <div class="space-y-2">
-                        <label class="flex items-center">
-                            <input type="radio" name="split-option" value="pages" checked class="mr-2">
-                            <span>Split into individual pages</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="radio" name="split-option" value="range" class="mr-2">
-                            <span>Split by page range (e.g., 1-5, 6-10)</span>
-                        </label>
-                        <div id="range-input" class="hidden ml-6 mt-2">
-                            <input type="text" id="page-ranges" placeholder="Enter page ranges (e.g., 1-5, 6-10)" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <div class="space-y-6">
+                    <!-- Drag and Drop Area -->
+                    <div id="split-drop-zone" class="drop-zone">
+                        <div class="floating-icon mb-4">
+                            <i data-lucide="upload-cloud" class="w-16 h-16 text-indigo-400 mx-auto"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Drop your PDF file here</h3>
+                        <p class="text-gray-500 mb-4">or click to browse from your computer</p>
+                        <input type="file" id="split-file-input" accept=".pdf" class="hidden">
+                        <div class="flex justify-center gap-2">
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">PDF</span>
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Single file</span>
                         </div>
                     </div>
-                </div>
 
-                <!-- Action Buttons for Split -->
-                <div class="mt-8 flex justify-center items-center space-x-4">
-                    <button id="split-btn" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
-                        Split PDF
-                    </button>
-                    <div id="split-loader" class="hidden">
-                        <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
+                    <!-- File Info -->
+                    <div id="split-file-section" class="hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">File information</h3>
+                            <button id="split-clear" class="text-red-500 hover:text-red-700 transition">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <div id="split-file-info" class="bg-gray-50 p-4 rounded-xl"></div>
                     </div>
-                    <a id="split-download-link" class="hidden bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-green-700 transition" download="split-pages.zip">
-                        Download Split ZIP
-                    </a>
+
+                    <!-- Split Options -->
+                    <div id="split-options" class="hidden">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Split options</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition">
+                                <input type="radio" name="split-option" value="pages" checked class="mr-3">
+                                <span class="flex-1">Split into individual pages</span>
+                                <i data-lucide="file-text" class="w-5 h-5 text-gray-400"></i>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition">
+                                <input type="radio" name="split-option" value="range" class="mr-3">
+                                <span class="flex-1">Split by page range (e.g., 1-5, 6-10)</span>
+                                <i data-lucide="layers" class="w-5 h-5 text-gray-400"></i>
+                            </label>
+                            <div id="range-input" class="hidden ml-4 mt-2">
+                                <input type="text" id="page-ranges" placeholder="e.g., 1-5, 6-10" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <div id="merge-option-container" class="hidden mt-3">
+                                    <label class="flex items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition">
+                                        <input type="checkbox" id="merge-split-files" class="mr-3">
+                                        <span class="flex-1">Merge split files into a single PDF</span>
+                                        <i data-lucide="combine" class="w-5 h-5 text-gray-400"></i>
+                                    </label>
+                                </div>
+                                <div id="reupload-warning" class="hidden warning-message">
+                                    <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600 mr-2"></i>
+                                    <span class="text-amber-800">If you want to change the merge option, please reupload the file.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-center items-center gap-4">
+                        <button id="split-btn" class="modern-button" disabled>
+                            <span class="flex items-center gap-2">
+                                <i data-lucide="scissors" class="w-5 h-5"></i>
+                                Split PDF
+                            </span>
+                        </button>
+                        <div id="split-loader" class="hidden">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                        </div>
+                        <a id="split-download-link" class="hidden modern-button bg-green-500 hover:bg-green-600">
+                            <span class="flex items-center gap-2">
+                                <i data-lucide="download" class="w-5 h-5"></i>
+                                Download ZIP
+                            </span>
+                        </a>
+                        <a id="split-merged-download-link" class="hidden modern-button bg-green-500 hover:bg-green-600">
+                            <span class="flex items-center gap-2">
+                                <i data-lucide="download" class="w-5 h-5"></i>
+                                Download Merged PDF
+                            </span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- PDF to PPT Mode Content -->
             <div id="ppt-content" class="hidden">
-                <!-- Drag and Drop Area for PPT -->
-                <div id="ppt-drop-zone" class="border-3 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer transition hover:border-blue-500 hover:bg-blue-50">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <p class="mt-4 text-lg text-gray-600">Drag & drop your PDF file here</p>
-                    <p class="text-sm text-gray-500">or click to browse</p>
-                    <input type="file" id="ppt-file-input" accept=".pdf" class="hidden">
-                </div>
+                <div class="space-y-6">
+                    <!-- Drag and Drop Area -->
+                    <div id="ppt-drop-zone" class="drop-zone">
+                        <div class="floating-icon mb-4">
+                            <i data-lucide="upload-cloud" class="w-16 h-16 text-indigo-400 mx-auto"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Drop your PDF file here</h3>
+                        <p class="text-gray-500 mb-4">or click to browse from your computer</p>
+                        <input type="file" id="ppt-file-input" accept=".pdf" class="hidden">
+                        <div class="flex justify-center gap-2">
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">PDF</span>
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Convert to PPT</span>
+                        </div>
+                    </div>
 
-                <!-- File Info -->
-                <div class="mt-6">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-lg font-medium text-gray-700">File Information</h3>
-                        <button id="ppt-clear" class="text-sm text-red-600 hover:text-red-800 hidden">Clear</button>
+                    <!-- File Info -->
+                    <div id="ppt-file-section" class="hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">File information</h3>
+                            <button id="ppt-clear" class="text-red-500 hover:text-red-700 transition">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <div id="ppt-file-info" class="bg-gray-50 p-4 rounded-xl"></div>
                     </div>
-                    <div id="ppt-file-info" class="bg-gray-50 p-4 rounded-lg">
-                        <p class="text-gray-500 text-center py-4">No file uploaded yet</p>
+
+                    <!-- Conversion Options -->
+                    <div id="ppt-options" class="hidden">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Conversion options</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition">
+                                <input type="checkbox" id="preserve-aspect" checked class="mr-3">
+                                <span class="flex-1">Preserve aspect ratio</span>
+                                <i data-lucide="maximize" class="w-5 h-5 text-gray-400"></i>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition">
+                                <input type="checkbox" id="high-quality" checked class="mr-3">
+                                <span class="flex-1">High quality conversion</span>
+                                <i data-lucide="sparkles" class="w-5 h-5 text-gray-400"></i>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div id="ppt-progress-container" class="hidden">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-lg font-semibold text-gray-800">Converting...</h3>
+                            <span id="ppt-progress-text" class="text-sm text-gray-500">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="ppt-progress-bar" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-center items-center gap-4">
+                        <button id="ppt-btn" class="modern-button" disabled>
+                            <span class="flex items-center gap-2">
+                                <i data-lucide="presentation" class="w-5 h-5"></i>
+                                Convert to PPT
+                            </span>
+                        </button>
+                        <div id="ppt-loader" class="hidden">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                        </div>
+                        <a id="ppt-download-link" class="hidden modern-button bg-green-500 hover:bg-green-600">
+                            <span class="flex items-center gap-2">
+                                <i data-lucide="download" class="w-5 h-5"></i>
+                                Download PPT
+                            </span>
+                        </a>
                     </div>
                 </div>
-
-                <!-- Conversion Options -->
-                <div class="mt-6">
-                    <h3 class="text-lg font-medium text-gray-700 mb-2">Conversion Options</h3>
-                    <div class="space-y-2">
-                        <label class="flex items-center">
-                            <input type="checkbox" id="preserve-aspect" checked class="mr-2">
-                            <span>Preserve aspect ratio</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" id="high-quality" checked class="mr-2">
-                            <span>High quality conversion (slower)</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Progress Bar -->
-                <div id="ppt-progress-container" class="mt-6 hidden">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-lg font-medium text-gray-700">Conversion Progress</h3>
-                        <span id="ppt-progress-text" class="text-sm text-gray-500">0%</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div id="ppt-progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons for PPT -->
-                <div class="mt-8 flex justify-center items-center space-x-4">
-                    <button id="ppt-btn" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
-                        Convert to PPT
-                    </button>
-                    <div id="ppt-loader" class="hidden">
-                        <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                    </div>
-                    <a id="ppt-download-link" class="hidden bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-green-700 transition" download="presentation.pptx">
-                        Download PowerPoint
-                    </a>
-                </div>
-            </div>
-
-            <!-- Error Message -->
-            <div id="error-message" class="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg hidden">
-                <p class="text-sm font-medium">Error:</p>
-                <p class="text-sm" id="error-text"></p>
             </div>
         </div>
     </main>
 
-    <footer class="bg-gray-800 text-white py-4 px-4 text-center">
-        <p class="text-sm">Solution by: PIH Total Rewards Team</p>
+    <!-- Footer -->
+    <footer class="relative z-10 glass-effect border-t border-gray-200 py-6 px-4 text-center">
+        <p class="text-gray-600 flex items-center justify-center gap-2">
+            <i data-lucide="heart" class="w-4 h-4 text-red-500"></i>
+            Solution by: PIH Total Rewards Team
+        </p>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set the worker source for PDF.js. This is required for it to function.
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-            
-            // Mode switching
-            const mergeTab = document.getElementById('merge-tab');
-            const splitTab = document.getElementById('split-tab');
-            const pptTab = document.getElementById('ppt-tab');
-            const mergeContent = document.getElementById('merge-content');
-            const splitContent = document.getElementById('split-content');
-            const pptContent = document.getElementById('ppt-content');
-            
-            mergeTab.addEventListener('click', () => {
-                mergeTab.classList.add('active');
-                splitTab.classList.remove('active');
-                pptTab.classList.remove('active');
-                mergeContent.classList.remove('hidden');
-                splitContent.classList.add('hidden');
-                pptContent.classList.add('hidden');
-            });
-            
-            splitTab.addEventListener('click', () => {
-                splitTab.classList.add('active');
-                mergeTab.classList.remove('active');
-                pptTab.classList.remove('active');
-                splitContent.classList.remove('hidden');
-                mergeContent.classList.add('hidden');
-                pptContent.classList.add('hidden');
-            });
-            
-            pptTab.addEventListener('click', () => {
-                pptTab.classList.add('active');
-                mergeTab.classList.remove('active');
-                splitTab.classList.remove('active');
-                pptContent.classList.remove('hidden');
-                mergeContent.classList.add('hidden');
-                splitContent.classList.add('hidden');
-            });
-            
-            // Split option change handler
-            document.querySelectorAll('input[name="split-option"]').forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    const rangeInput = document.getElementById('range-input');
-                    if (e.target.value === 'range') {
-                        rangeInput.classList.remove('hidden');
-                    } else {
-                        rangeInput.classList.add('hidden');
-                    }
-                });
-            });
-            
-            // Merge functionality
-            const mergeDropZone = document.getElementById('merge-drop-zone');
-            const mergeFileInput = document.getElementById('merge-file-input');
-            const mergeFileList = document.getElementById('merge-file-list');
-            const mergeBtn = document.getElementById('merge-btn');
-            const mergeLoader = document.getElementById('merge-loader');
-            const mergeDownloadLink = document.getElementById('merge-download-link');
-            const mergeClearAllBtn = document.getElementById('merge-clear-all');
-            const errorMessage = document.getElementById('error-message');
-            const errorText = document.getElementById('error-text');
-            
-            let uploadedFiles = [];
-            let sortable;
-            let mergeBlobUrl = null;
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
 
-            // Initialize SortableJS for the file list
-            function initSortable() {
-                if (sortable) {
-                    sortable.destroy();
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Set the worker source for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        
+        // Mode switching
+        const mergeTab = document.getElementById('merge-tab');
+        const splitTab = document.getElementById('split-tab');
+        const pptTab = document.getElementById('ppt-tab');
+        const mergeContent = document.getElementById('merge-content');
+        const splitContent = document.getElementById('split-content');
+        const pptContent = document.getElementById('ppt-content');
+        
+        mergeTab.addEventListener('click', () => {
+            setActiveTab(mergeTab, [splitTab, pptTab], mergeContent, [splitContent, pptContent]);
+        });
+        
+        splitTab.addEventListener('click', () => {
+            setActiveTab(splitTab, [mergeTab, pptTab], splitContent, [mergeContent, pptContent]);
+        });
+        
+        pptTab.addEventListener('click', () => {
+            setActiveTab(pptTab, [mergeTab, splitTab], pptContent, [mergeContent, splitContent]);
+        });
+        
+        function setActiveTab(activeTab, inactiveTabs, activeContent, inactiveContents) {
+            activeTab.classList.add('active');
+            inactiveTabs.forEach(tab => tab.classList.remove('active'));
+            activeContent.classList.remove('hidden');
+            inactiveContents.forEach(content => content.classList.add('hidden'));
+        }
+        
+        // Split option change handler
+        document.querySelectorAll('input[name="split-option"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const rangeInput = document.getElementById('range-input');
+                const mergeOptionContainer = document.getElementById('merge-option-container');
+                const reuploadWarning = document.getElementById('reupload-warning');
+                
+                if (e.target.value === 'range') {
+                    rangeInput.classList.remove('hidden');
+                    mergeOptionContainer.classList.remove('hidden');
+                } else {
+                    rangeInput.classList.add('hidden');
+                    mergeOptionContainer.classList.add('hidden');
                 }
                 
-                sortable = new Sortable(mergeFileList, {
-                    animation: 150,
-                    ghostClass: 'sortable-ghost',
-                    dragClass: 'sortable-drag',
-                    handle: '.drag-handle',
-                    onEnd: function(evt) {
-                        // Update the uploadedFiles array to match the new order
-                        const item = uploadedFiles.splice(evt.oldIndex, 1)[0];
-                        uploadedFiles.splice(evt.newIndex, 0, item);
+                // Reset reupload warning when changing split options
+                reuploadWarning.classList.add('hidden');
+            });
+        });
+        
+        // Merge split files checkbox change handler
+        document.getElementById('merge-split-files').addEventListener('change', (e) => {
+            const reuploadWarning = document.getElementById('reupload-warning');
+            
+            if (hasSplitFile) {
+                reuploadWarning.classList.remove('hidden');
+                e.target.checked = !e.target.checked; // Toggle back to previous state
+                showNotification('Please reupload the file to change the merge option', 'info');
+            }
+        });
+        
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" class="w-5 h-5"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.getElementById('notification-container').appendChild(notification);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        
+        // Merge functionality
+        const mergeDropZone = document.getElementById('merge-drop-zone');
+        const mergeFileInput = document.getElementById('merge-file-input');
+        const mergeFileList = document.getElementById('merge-file-list');
+        const mergeBtn = document.getElementById('merge-btn');
+        const mergeLoader = document.getElementById('merge-loader');
+        const mergeDownloadLink = document.getElementById('merge-download-link');
+        const mergeClearAllBtn = document.getElementById('merge-clear-all');
+        const mergeFileSection = document.getElementById('merge-file-section');
+        
+        let uploadedFiles = [];
+        let sortable;
+        let mergeBlobUrl = null;
+
+        function initSortable() {
+            if (sortable) {
+                sortable.destroy();
+            }
+            
+            sortable = new Sortable(mergeFileList, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                dragClass: 'sortable-drag',
+                handle: '.drag-handle',
+                onEnd: function(evt) {
+                    const item = uploadedFiles.splice(evt.oldIndex, 1)[0];
+                    uploadedFiles.splice(evt.newIndex, 0, item);
+                }
+            });
+        }
+
+        // Event listeners for merge
+        mergeDropZone.addEventListener('click', () => mergeFileInput.click());
+        
+        mergeDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            mergeDropZone.classList.add('drag-over');
+        });
+        
+        mergeDropZone.addEventListener('dragleave', () => {
+            mergeDropZone.classList.remove('drag-over');
+        });
+        
+        mergeDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            mergeDropZone.classList.remove('drag-over');
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        mergeFileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        mergeClearAllBtn.addEventListener('click', () => {
+            uploadedFiles = [];
+            renderFileList();
+            mergeBtn.disabled = true;
+            mergeFileSection.classList.add('hidden');
+            mergeDownloadLink.classList.add('hidden');
+            if (mergeBlobUrl) {
+                URL.revokeObjectURL(mergeBlobUrl);
+                mergeBlobUrl = null;
+            }
+            mergeFileInput.value = '';
+        });
+        
+        mergeBtn.addEventListener('click', mergePDFs);
+        
+        async function handleFiles(files) {
+            for (let i = 0; i < files.length; i++) {
+                if (files[i].type === 'application/pdf') {
+                    try {
+                        const arrayBuffer = await files[i].arrayBuffer();
+                        uploadedFiles.push({
+                            file: files[i],
+                            content: arrayBuffer,
+                            name: files[i].name,
+                            size: files[i].size
+                        });
+                    } catch (error) {
+                        console.error('Error reading file:', error);
+                        showNotification(`Could not read file "${files[i].name}"`, 'error');
+                    }
+                } else {
+                    showNotification(`"${files[i].name}" is not a PDF file`, 'error');
+                }
+            }
+            renderFileList();
+            mergeBtn.disabled = uploadedFiles.length === 0;
+            mergeFileSection.classList.toggle('hidden', uploadedFiles.length === 0);
+        }
+        
+        function renderFileList() {
+            mergeFileList.innerHTML = '';
+            
+            if (uploadedFiles.length === 0) {
+                return;
+            }
+            
+            uploadedFiles.forEach((fileObj, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="drag-handle mr-3 text-gray-400 hover:text-gray-600">
+                        <i data-lucide="grip-vertical" class="w-5 h-5"></i>
+                    </div>
+                    <div class="flex-1 flex items-center">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+                            <i data-lucide="file-text" class="w-5 h-5 text-red-500"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-800">${fileObj.name}</p>
+                            <p class="text-xs text-gray-500">${formatFileSize(fileObj.size)}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-500 mr-2">${index + 1}</span>
+                        <button class="remove-file text-red-500 hover:text-red-700" data-index="${index}">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+                mergeFileList.appendChild(fileItem);
+            });
+            
+            document.querySelectorAll('.remove-file').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = parseInt(e.currentTarget.getAttribute('data-index'));
+                    uploadedFiles.splice(index, 1);
+                    renderFileList();
+                    mergeBtn.disabled = uploadedFiles.length === 0;
+                    mergeFileSection.classList.toggle('hidden', uploadedFiles.length === 0);
+                    mergeDownloadLink.classList.add('hidden');
+                    if (mergeBlobUrl) {
+                        URL.revokeObjectURL(mergeBlobUrl);
+                        mergeBlobUrl = null;
                     }
                 });
-            }
-
-            // Show error message
-            function showError(message) {
-                errorText.textContent = message;
-                errorMessage.classList.remove('hidden');
-                setTimeout(() => {
-                    errorMessage.classList.add('hidden');
-                }, 5000);
-            }
-
-            // Event listeners for merge
-            mergeDropZone.addEventListener('click', () => mergeFileInput.click());
-            
-            mergeDropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                mergeDropZone.classList.add('border-blue-500', 'bg-blue-50');
             });
             
-            mergeDropZone.addEventListener('dragleave', () => {
-                mergeDropZone.classList.remove('border-blue-500', 'bg-blue-50');
-            });
+            initSortable();
+            lucide.createIcons();
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        async function mergePDFs() {
+            if (uploadedFiles.length === 0) return;
             
-            mergeDropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                mergeDropZone.classList.remove('border-blue-500', 'bg-blue-50');
-                handleFiles(e.dataTransfer.files);
-            });
+            mergeBtn.disabled = true;
+            mergeLoader.classList.remove('hidden');
+            mergeDownloadLink.classList.add('hidden');
             
-            mergeFileInput.addEventListener('change', (e) => {
-                handleFiles(e.target.files);
-            });
-            
-            mergeClearAllBtn.addEventListener('click', () => {
-                uploadedFiles = [];
-                renderFileList();
-                mergeBtn.disabled = true;
-                mergeClearAllBtn.classList.add('hidden');
-                mergeDownloadLink.classList.add('hidden');
+            try {
+                const mergedPdf = await PDFLib.PDFDocument.create();
+                
+                for (const fileObj of uploadedFiles) {
+                    try {
+                        const pdf = await PDFLib.PDFDocument.load(fileObj.content);
+                        const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                        pages.forEach(page => mergedPdf.addPage(page));
+                    } catch (error) {
+                        console.error('Error processing PDF:', error);
+                        throw new Error(`Failed to process "${fileObj.name}"`);
+                    }
+                }
+                
+                const mergedPdfBytes = await mergedPdf.save();
+                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+                
                 if (mergeBlobUrl) {
                     URL.revokeObjectURL(mergeBlobUrl);
-                    mergeBlobUrl = null;
                 }
-                // Reset file input
-                mergeFileInput.value = '';
-            });
+                
+                mergeBlobUrl = URL.createObjectURL(blob);
+                mergeDownloadLink.href = mergeBlobUrl;
+                mergeDownloadLink.classList.remove('hidden');
+                mergeLoader.classList.add('hidden');
+                showNotification('PDFs merged successfully!');
+            } catch (error) {
+                console.error('Error merging PDFs:', error);
+                showNotification(error.message || 'Failed to merge PDFs', 'error');
+                mergeLoader.classList.add('hidden');
+                mergeBtn.disabled = false;
+            }
+        }
+        
+        // Split functionality
+        const splitDropZone = document.getElementById('split-drop-zone');
+        const splitFileInput = document.getElementById('split-file-input');
+        const splitFileInfo = document.getElementById('split-file-info');
+        const splitBtn = document.getElementById('split-btn');
+        const splitLoader = document.getElementById('split-loader');
+        const splitDownloadLink = document.getElementById('split-download-link');
+        const splitMergedDownloadLink = document.getElementById('split-merged-download-link');
+        const splitClearBtn = document.getElementById('split-clear');
+        const splitFileSection = document.getElementById('split-file-section');
+        const splitOptions = document.getElementById('split-options');
+        
+        let uploadedFile = null;
+        let pdfDoc = null;
+        let splitBlobUrl = null;
+        let splitMergedBlobUrl = null;
+        let hasSplitFile = false;
+        
+        splitDropZone.addEventListener('click', () => splitFileInput.click());
+        
+        splitDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            splitDropZone.classList.add('drag-over');
+        });
+        
+        splitDropZone.addEventListener('dragleave', () => {
+            splitDropZone.classList.remove('drag-over');
+        });
+        
+        splitDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            splitDropZone.classList.remove('drag-over');
+            handleSplitFile(e.dataTransfer.files[0]);
+        });
+        
+        splitFileInput.addEventListener('change', (e) => {
+            handleSplitFile(e.target.files[0]);
+        });
+        
+        splitClearBtn.addEventListener('click', () => {
+            resetSplitState();
+        });
+        
+        splitBtn.addEventListener('click', splitPDF);
+        
+        function resetSplitState() {
+            uploadedFile = null;
+            pdfDoc = null;
+            hasSplitFile = false;
+            splitFileInfo.innerHTML = '';
+            splitBtn.disabled = true;
+            splitFileSection.classList.add('hidden');
+            splitOptions.classList.add('hidden');
+            splitDownloadLink.classList.add('hidden');
+            splitMergedDownloadLink.classList.add('hidden');
+            document.getElementById('reupload-warning').classList.add('hidden');
+            if (splitBlobUrl) {
+                URL.revokeObjectURL(splitBlobUrl);
+                splitBlobUrl = null;
+            }
+            if (splitMergedBlobUrl) {
+                URL.revokeObjectURL(splitMergedBlobUrl);
+                splitMergedBlobUrl = null;
+            }
+            splitFileInput.value = '';
+        }
+        
+        async function handleSplitFile(file) {
+            if (!file || file.type !== 'application/pdf') {
+                showNotification('Please select a valid PDF file', 'error');
+                return;
+            }
             
-            mergeBtn.addEventListener('click', mergePDFs);
+            try {
+                uploadedFile = file;
+                const arrayBuffer = await file.arrayBuffer();
+                pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                
+                const pageCount = pdfDoc.getPageCount();
+                splitFileInfo.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                            <i data-lucide="file-text" class="w-6 h-6 text-red-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-800">${file.name}</p>
+                            <p class="text-sm text-gray-500">${formatFileSize(file.size)} • ${pageCount} page${pageCount !== 1 ? 's' : ''}</p>
+                        </div>
+                    </div>
+                `;
+                
+                splitBtn.disabled = false;
+                splitFileSection.classList.remove('hidden');
+                splitOptions.classList.remove('hidden');
+                splitDownloadLink.classList.add('hidden');
+                splitMergedDownloadLink.classList.add('hidden');
+                hasSplitFile = false;
+                document.getElementById('reupload-warning').classList.add('hidden');
+                lucide.createIcons();
+            } catch (error) {
+                console.error('Error reading PDF:', error);
+                showNotification('Failed to read the PDF file', 'error');
+            }
+        }
+        
+        async function splitPDF() {
+            if (!pdfDoc) return;
             
-            // Handle uploaded files
-            async function handleFiles(files) {
-                for (let i = 0; i < files.length; i++) {
-                    if (files[i].type === 'application/pdf') {
-                        try {
-                            // Read file immediately to avoid permission issues
-                            const arrayBuffer = await files[i].arrayBuffer();
-                            // Store both the file and its content
-                            uploadedFiles.push({
-                                file: files[i],
-                                content: arrayBuffer,
-                                name: files[i].name,
-                                size: files[i].size
-                            });
-                        } catch (error) {
-                            console.error('Error reading file:', error);
-                            showError(`Could not read file "${files[i].name}". Please try selecting it again.`);
-                        }
-                    } else {
-                        showError(`"${files[i].name}" is not a PDF file. Please select only PDF files.`);
+            splitBtn.disabled = true;
+            splitLoader.classList.remove('hidden');
+            splitDownloadLink.classList.add('hidden');
+            splitMergedDownloadLink.classList.add('hidden');
+            
+            try {
+                const pageCount = pdfDoc.getPageCount();
+                const splitOption = document.querySelector('input[name="split-option"]:checked').value;
+                const mergeSplitFiles = document.getElementById('merge-split-files').checked;
+                
+                // Create split PDFs
+                const splitPdfs = [];
+                
+                if (splitOption === 'pages') {
+                    for (let i = 0; i < pageCount; i++) {
+                        const newPdf = await PDFLib.PDFDocument.create();
+                        const [page] = await newPdf.copyPages(pdfDoc, [i]);
+                        newPdf.addPage(page);
+                        
+                        const pdfBytes = await newPdf.save();
+                        splitPdfs.push({
+                            bytes: pdfBytes,
+                            name: `${uploadedFile.name.replace('.pdf', '')}_page_${i + 1}.pdf`
+                        });
+                    }
+                } else if (splitOption === 'range') {
+                    const pageRanges = document.getElementById('page-ranges').value;
+                    const ranges = parsePageRanges(pageRanges, pageCount);
+                    
+                    for (let i = 0; i < ranges.length; i++) {
+                        const [start, end] = ranges[i];
+                        const newPdf = await PDFLib.PDFDocument.create();
+                        const pages = await newPdf.copyPages(pdfDoc, Array.from({length: end - start + 1}, (_, j) => start + j - 1));
+                        pages.forEach(page => newPdf.addPage(page));
+                        
+                        const pdfBytes = await newPdf.save();
+                        splitPdfs.push({
+                            bytes: pdfBytes,
+                            name: `${uploadedFile.name.replace('.pdf', '')}_pages_${start}-${end}.pdf`
+                        });
                     }
                 }
-                renderFileList();
-                mergeBtn.disabled = uploadedFiles.length === 0;
-                mergeClearAllBtn.classList.toggle('hidden', uploadedFiles.length === 0);
-            }
-            
-            // Render the file list
-            function renderFileList() {
-                mergeFileList.innerHTML = '';
                 
-                if (uploadedFiles.length === 0) {
-                    mergeFileList.innerHTML = '<p class="text-gray-500 text-center py-4">No files uploaded yet</p>';
-                    return;
-                }
-                
-                uploadedFiles.forEach((fileObj, index) => {
-                    const fileItem = document.createElement('div');
-                    fileItem.className = 'flex items-center bg-gray-50 p-3 rounded-lg';
-                    fileItem.innerHTML = `
-                        <div class="drag-handle mr-3 text-gray-400 hover:text-gray-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </div>
-                        <div class="flex-1 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
-                            <div>
-                                <p class="font-medium text-gray-800">${fileObj.name}</p>
-                                <p class="text-xs text-gray-500">${formatFileSize(fileObj.size)}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center">
-                            <span class="text-sm text-gray-500 mr-2">${index + 1}</span>
-                            <button class="remove-file text-red-500 hover:text-red-700" data-index="${index}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
-                    `;
-                    mergeFileList.appendChild(fileItem);
-                });
-                
-                // Add event listeners to remove buttons
-                document.querySelectorAll('.remove-file').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const index = parseInt(e.currentTarget.getAttribute('data-index'));
-                        uploadedFiles.splice(index, 1);
-                        renderFileList();
-                        mergeBtn.disabled = uploadedFiles.length === 0;
-                        mergeClearAllBtn.classList.toggle('hidden', uploadedFiles.length === 0);
-                        mergeDownloadLink.classList.add('hidden');
-                        if (mergeBlobUrl) {
-                            URL.revokeObjectURL(mergeBlobUrl);
-                            mergeBlobUrl = null;
-                        }
-                    });
-                });
-                
-                // Reinitialize sortable after rendering
-                initSortable();
-            }
-            
-            // Format file size
-            function formatFileSize(bytes) {
-                if (bytes === 0) return '0 Bytes';
-                const k = 1024;
-                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-            }
-            
-            // Merge PDFs
-            async function mergePDFs() {
-                if (uploadedFiles.length === 0) return;
-                
-                mergeBtn.disabled = true;
-                mergeLoader.classList.remove('hidden');
-                mergeDownloadLink.classList.add('hidden');
-                
-                try {
+                // Handle merge option
+                if (splitOption === 'range' && mergeSplitFiles) {
+                    // Create a merged PDF from all the split PDFs
                     const mergedPdf = await PDFLib.PDFDocument.create();
                     
-                    for (const fileObj of uploadedFiles) {
-                        try {
-                            // Use the pre-read content instead of trying to read the file again
-                            const pdf = await PDFLib.PDFDocument.load(fileObj.content);
-                            const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-                            pages.forEach(page => mergedPdf.addPage(page));
-                        } catch (error) {
-                            console.error('Error processing PDF:', error);
-                            throw new Error(`Failed to process "${fileObj.name}". The file might be corrupted or password-protected.`);
-                        }
+                    for (const splitPdf of splitPdfs) {
+                        const pdf = await PDFLib.PDFDocument.load(splitPdf.bytes);
+                        const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                        pages.forEach(page => mergedPdf.addPage(page));
                     }
                     
                     const mergedPdfBytes = await mergedPdf.save();
                     const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
                     
-                    // Clean up previous blob URL if exists
-                    if (mergeBlobUrl) {
-                        URL.revokeObjectURL(mergeBlobUrl);
+                    if (splitMergedBlobUrl) {
+                        URL.revokeObjectURL(splitMergedBlobUrl);
                     }
                     
-                    mergeBlobUrl = URL.createObjectURL(blob);
-                    mergeDownloadLink.href = mergeBlobUrl;
-                    mergeDownloadLink.classList.remove('hidden');
-                    mergeLoader.classList.add('hidden');
-                } catch (error) {
-                    console.error('Error merging PDFs:', error);
-                    showError(error.message || 'An error occurred while merging the PDFs. Please try again.');
-                    mergeLoader.classList.add('hidden');
-                    mergeBtn.disabled = false;
-                }
-            }
-            
-            // Split functionality
-            const splitDropZone = document.getElementById('split-drop-zone');
-            const splitFileInput = document.getElementById('split-file-input');
-            const splitFileInfo = document.getElementById('split-file-info');
-            const splitBtn = document.getElementById('split-btn');
-            const splitLoader = document.getElementById('split-loader');
-            const splitDownloadLink = document.getElementById('split-download-link');
-            const splitClearBtn = document.getElementById('split-clear');
-            
-            let uploadedFile = null;
-            let pdfDoc = null;
-            let splitBlobUrl = null;
-            
-            // Event listeners for split
-            splitDropZone.addEventListener('click', () => splitFileInput.click());
-            
-            splitDropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                splitDropZone.classList.add('border-blue-500', 'bg-blue-50');
-            });
-            
-            splitDropZone.addEventListener('dragleave', () => {
-                splitDropZone.classList.remove('border-blue-500', 'bg-blue-50');
-            });
-            
-            splitDropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                splitDropZone.classList.remove('border-blue-500', 'bg-blue-50');
-                handleSplitFile(e.dataTransfer.files[0]);
-            });
-            
-            splitFileInput.addEventListener('change', (e) => {
-                handleSplitFile(e.target.files[0]);
-            });
-            
-            splitClearBtn.addEventListener('click', () => {
-                resetSplitState();
-            });
-            
-            splitBtn.addEventListener('click', splitPDF);
-            
-            // Reset split state
-            function resetSplitState() {
-                uploadedFile = null;
-                pdfDoc = null;
-                splitFileInfo.innerHTML = '<p class="text-gray-500 text-center py-4">No file uploaded yet</p>';
-                splitBtn.disabled = true;
-                splitClearBtn.classList.add('hidden');
-                splitDownloadLink.classList.add('hidden');
-                if (splitBlobUrl) {
-                    URL.revokeObjectURL(splitBlobUrl);
-                    splitBlobUrl = null;
-                }
-                // Reset file input - this is the key fix
-                splitFileInput.value = '';
-            }
-            
-            // Handle uploaded file for split
-            async function handleSplitFile(file) {
-                if (!file || file.type !== 'application/pdf') {
-                    showError('Please select a valid PDF file.');
-                    return;
-                }
-                
-                try {
-                    uploadedFile = file;
-                    const arrayBuffer = await file.arrayBuffer();
-                    pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                    splitMergedBlobUrl = URL.createObjectURL(blob);
+                    splitMergedDownloadLink.href = splitMergedBlobUrl;
+                    splitMergedDownloadLink.download = `${uploadedFile.name.replace('.pdf', '')}_merged.pdf`;
+                    splitMergedDownloadLink.classList.remove('hidden');
                     
-                    // Display file info
-                    const pageCount = pdfDoc.getPageCount();
-                    splitFileInfo.innerHTML = `
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
-                            <div>
-                                <p class="font-medium text-gray-800">${file.name}</p>
-                                <p class="text-xs text-gray-500">${formatFileSize(file.size)} • ${pageCount} page${pageCount !== 1 ? 's' : ''}</p>
-                            </div>
-                        </div>
-                    `;
-                    
-                    splitBtn.disabled = false;
-                    splitClearBtn.classList.remove('hidden');
-                    splitDownloadLink.classList.add('hidden');
-                } catch (error) {
-                    console.error('Error reading PDF:', error);
-                    showError('Failed to read the PDF file. It might be corrupted or password-protected.');
-                }
-            }
-            
-            // Split PDF
-            async function splitPDF() {
-                if (!pdfDoc) return;
-                
-                splitBtn.disabled = true;
-                splitLoader.classList.remove('hidden');
-                splitDownloadLink.classList.add('hidden');
-                
-                try {
+                    showNotification('PDF split and merged successfully!');
+                } else {
+                    // Create a ZIP file with all the split PDFs
                     const zip = new JSZip();
-                    const pageCount = pdfDoc.getPageCount();
-                    const splitOption = document.querySelector('input[name="split-option"]:checked').value;
                     
-                    if (splitOption === 'pages') {
-                        // Split into individual pages
-                        for (let i = 0; i < pageCount; i++) {
-                            const newPdf = await PDFLib.PDFDocument.create();
-                            const [page] = await newPdf.copyPages(pdfDoc, [i]);
-                            newPdf.addPage(page);
-                            
-                            const pdfBytes = await newPdf.save();
-                            const fileName = `${uploadedFile.name.replace('.pdf', '')}_page_${i + 1}.pdf`;
-                            zip.file(fileName, pdfBytes);
-                        }
-                    } else if (splitOption === 'range') {
-                        // Split by page ranges
-                        const pageRanges = document.getElementById('page-ranges').value;
-                        const ranges = parsePageRanges(pageRanges, pageCount);
-                        
-                        for (let i = 0; i < ranges.length; i++) {
-                            const [start, end] = ranges[i];
-                            const newPdf = await PDFLib.PDFDocument.create();
-                            const pages = await newPdf.copyPages(pdfDoc, Array.from({length: end - start + 1}, (_, j) => start + j - 1));
-                            pages.forEach(page => newPdf.addPage(page));
-                            
-                            const pdfBytes = await newPdf.save();
-                            const fileName = `${uploadedFile.name.replace('.pdf', '')}_pages_${start}-${end}.pdf`;
-                            zip.file(fileName, pdfBytes);
-                        }
+                    for (const splitPdf of splitPdfs) {
+                        zip.file(splitPdf.name, splitPdf.bytes);
                     }
                     
-                    // Generate and download the zip file
                     const zipBlob = await zip.generateAsync({type: 'blob'});
                     
-                    // Clean up previous blob URL if exists
                     if (splitBlobUrl) {
                         URL.revokeObjectURL(splitBlobUrl);
                     }
@@ -656,213 +1018,218 @@
                     splitBlobUrl = URL.createObjectURL(zipBlob);
                     splitDownloadLink.href = splitBlobUrl;
                     splitDownloadLink.classList.remove('hidden');
-                    splitLoader.classList.add('hidden');
-                } catch (error) {
-                    console.error('Error splitting PDF:', error);
-                    showError(error.message || 'An error occurred while splitting the PDF. Please try again.');
-                    splitLoader.classList.add('hidden');
-                    splitBtn.disabled = false;
+                    
+                    showNotification('PDF split successfully!');
                 }
-            }
-            
-            // Parse page ranges from input string
-            function parsePageRanges(input, maxPage) {
-                const ranges = [];
-                const parts = input.split(',');
                 
-                for (const part of parts) {
-                    const trimmed = part.trim();
-                    if (trimmed.includes('-')) {
-                        const [start, end] = trimmed.split('-').map(n => parseInt(n.trim()));
-                        if (isNaN(start) || isNaN(end) || start < 1 || end > maxPage || start > end) {
-                            throw new Error(`Invalid page range: ${trimmed}. Please use valid ranges like 1-5.`);
-                        }
-                        ranges.push([start, end]);
-                    } else {
-                        const page = parseInt(trimmed);
-                        if (isNaN(page) || page < 1 || page > maxPage) {
-                            throw new Error(`Invalid page number: ${trimmed}. Please use valid page numbers.`);
-                        }
-                        ranges.push([page, page]);
+                // Mark that the file has been split
+                hasSplitFile = true;
+                
+                // Show reupload warning if using split by range
+                if (splitOption === 'range') {
+                    document.getElementById('reupload-warning').classList.remove('hidden');
+                }
+                
+                splitLoader.classList.add('hidden');
+            } catch (error) {
+                console.error('Error splitting PDF:', error);
+                showNotification(error.message || 'Failed to split PDF', 'error');
+                splitLoader.classList.add('hidden');
+                splitBtn.disabled = false;
+            }
+        }
+        
+        function parsePageRanges(input, maxPage) {
+            const ranges = [];
+            const parts = input.split(',');
+            
+            for (const part of parts) {
+                const trimmed = part.trim();
+                if (trimmed.includes('-')) {
+                    const [start, end] = trimmed.split('-').map(n => parseInt(n.trim()));
+                    if (isNaN(start) || isNaN(end) || start < 1 || end > maxPage || start > end) {
+                        throw new Error(`Invalid page range: ${trimmed}`);
                     }
-                }
-                
-                return ranges;
-            }
-            
-            // PDF to PPT functionality
-            const pptDropZone = document.getElementById('ppt-drop-zone');
-            const pptFileInput = document.getElementById('ppt-file-input');
-            const pptFileInfo = document.getElementById('ppt-file-info');
-            const pptBtn = document.getElementById('ppt-btn');
-            const pptLoader = document.getElementById('ppt-loader');
-            const pptDownloadLink = document.getElementById('ppt-download-link');
-            const pptClearBtn = document.getElementById('ppt-clear');
-            const pptProgressContainer = document.getElementById('ppt-progress-container');
-            const pptProgressBar = document.getElementById('ppt-progress-bar');
-            const pptProgressText = document.getElementById('ppt-progress-text');
-            
-            let pptUploadedFile = null;
-            let pptBlobUrl = null;
-            
-            // Event listeners for PPT
-            pptDropZone.addEventListener('click', () => pptFileInput.click());
-            
-            pptDropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                pptDropZone.classList.add('border-blue-500', 'bg-blue-50');
-            });
-            
-            pptDropZone.addEventListener('dragleave', () => {
-                pptDropZone.classList.remove('border-blue-500', 'bg-blue-50');
-            });
-            
-            pptDropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                pptDropZone.classList.remove('border-blue-500', 'bg-blue-50');
-                handlePptFile(e.dataTransfer.files[0]);
-            });
-            
-            pptFileInput.addEventListener('change', (e) => {
-                handlePptFile(e.target.files[0]);
-            });
-            
-            pptClearBtn.addEventListener('click', () => {
-                resetPptState();
-            });
-            
-            pptBtn.addEventListener('click', convertToPpt);
-            
-            // Reset PPT state
-            function resetPptState() {
-                pptUploadedFile = null;
-                pptFileInfo.innerHTML = '<p class="text-gray-500 text-center py-4">No file uploaded yet</p>';
-                pptBtn.disabled = true;
-                pptClearBtn.classList.add('hidden');
-                pptDownloadLink.classList.add('hidden');
-                pptProgressContainer.classList.add('hidden');
-                if (pptBlobUrl) {
-                    URL.revokeObjectURL(pptBlobUrl);
-                    pptBlobUrl = null;
-                }
-                // Reset file input
-                pptFileInput.value = '';
-            }
-            
-            // Handle uploaded file for PPT
-            async function handlePptFile(file) {
-                if (!file || file.type !== 'application/pdf') {
-                    showError('Please select a valid PDF file.');
-                    return;
-                }
-                
-                try {
-                    pptUploadedFile = file;
-                    const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-                    
-                    // Display file info
-                    const pageCount = pdf.numPages;
-                    pptFileInfo.innerHTML = `
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
-                            <div>
-                                <p class="font-medium text-gray-800">${file.name}</p>
-                                <p class="text-xs text-gray-500">${formatFileSize(file.size)} • ${pageCount} page${pageCount !== 1 ? 's' : ''}</p>
-                            </div>
-                        </div>
-                    `;
-                    
-                    pptBtn.disabled = false;
-                    pptClearBtn.classList.remove('hidden');
-                    pptDownloadLink.classList.add('hidden');
-                } catch (error) {
-                    console.error('Error reading PDF:', error);
-                    showError('Failed to read the PDF file. It might be corrupted or password-protected.');
-                }
-            }
-            
-            // Convert PDF to PPT
-            async function convertToPpt() {
-                if (!pptUploadedFile) return;
-                
-                pptBtn.disabled = true;
-                pptLoader.classList.remove('hidden');
-                pptDownloadLink.classList.add('hidden');
-                pptProgressContainer.classList.remove('hidden');
-                
-                try {
-                    const arrayBuffer = await pptUploadedFile.arrayBuffer();
-                    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-                    const numPages = pdf.numPages;
-                    
-                    const preserveAspect = document.getElementById('preserve-aspect').checked;
-                    const highQuality = document.getElementById('high-quality').checked;
-                    const scale = highQuality ? 2 : 1.5;
-                    
-                    const pptx = new PptxGenJS();
-                    pptx.defineLayout({ name:'A4', width:10, height:7.5 });
-                    pptx.layout = 'A4';
-                    
-                    for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-                        // Update progress
-                        const progress = Math.round((pageNum / numPages) * 100);
-                        pptProgressBar.style.width = `${progress}%`;
-                        pptProgressText.textContent = `${progress}%`;
-                        
-                        const page = await pdf.getPage(pageNum);
-                        const viewport = page.getViewport({ scale });
-                        
-                        // Create a canvas to render the PDF page
-                        const canvas = document.createElement('canvas');
-                        const context = canvas.getContext('2d');
-                        canvas.height = viewport.height;
-                        canvas.width = viewport.width;
-                        
-                        await page.render({ canvasContext: context, viewport: viewport }).promise;
-                        const imgData = canvas.toDataURL('image/png');
-                        
-                        // Add slide and image to the presentation
-                        const slide = pptx.addSlide();
-                        
-                        if (preserveAspect) {
-                            slide.addImage({
-                                data: imgData,
-                                x: 0, y: 0,
-                                w: '100%', h: '100%',
-                                sizing: { type: 'contain', w: 10, h: 7.5 }
-                            });
-                        } else {
-                            slide.addImage({
-                                data: imgData,
-                                x: 0, y: 0,
-                                w: 10, h: 7.5
-                            });
-                        }
+                    ranges.push([start, end]);
+                } else {
+                    const page = parseInt(trimmed);
+                    if (isNaN(page) || page < 1 || page > maxPage) {
+                        throw new Error(`Invalid page number: ${trimmed}`);
                     }
-                    
-                    // Finalize progress
-                    pptProgressBar.style.width = '100%';
-                    pptProgressText.textContent = '100%';
-                    
-                    // Generate and download the PPT file
-                    const fileName = `${pptUploadedFile.name.replace('.pdf', '')}.pptx`;
-                    await pptx.writeFile({ fileName });
-                    
-                    pptLoader.classList.add('hidden');
-                } catch (error) {
-                    console.error('Error converting to PPT:', error);
-                    showError(error.message || 'An error occurred while converting the PDF to PowerPoint. Please try again.');
-                    pptLoader.classList.add('hidden');
-                    pptBtn.disabled = false;
+                    ranges.push([page, page]);
                 }
             }
             
-            // Initialize
-            renderFileList();
+            return ranges;
+        }
+        
+        // PDF to PPT functionality
+        const pptDropZone = document.getElementById('ppt-drop-zone');
+        const pptFileInput = document.getElementById('ppt-file-input');
+        const pptFileInfo = document.getElementById('ppt-file-info');
+        const pptBtn = document.getElementById('ppt-btn');
+        const pptLoader = document.getElementById('ppt-loader');
+        const pptDownloadLink = document.getElementById('ppt-download-link');
+        const pptClearBtn = document.getElementById('ppt-clear');
+        const pptProgressContainer = document.getElementById('ppt-progress-container');
+        const pptProgressBar = document.getElementById('ppt-progress-bar');
+        const pptProgressText = document.getElementById('ppt-progress-text');
+        const pptFileSection = document.getElementById('ppt-file-section');
+        const pptOptions = document.getElementById('ppt-options');
+        
+        let pptUploadedFile = null;
+        let pptBlobUrl = null;
+        
+        pptDropZone.addEventListener('click', () => pptFileInput.click());
+        
+        pptDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            pptDropZone.classList.add('drag-over');
         });
+        
+        pptDropZone.addEventListener('dragleave', () => {
+            pptDropZone.classList.remove('drag-over');
+        });
+        
+        pptDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            pptDropZone.classList.remove('drag-over');
+            handlePptFile(e.dataTransfer.files[0]);
+        });
+        
+        pptFileInput.addEventListener('change', (e) => {
+            handlePptFile(e.target.files[0]);
+        });
+        
+        pptClearBtn.addEventListener('click', () => {
+            resetPptState();
+        });
+        
+        pptBtn.addEventListener('click', convertToPpt);
+        
+        function resetPptState() {
+            pptUploadedFile = null;
+            pptFileInfo.innerHTML = '';
+            pptBtn.disabled = true;
+            pptFileSection.classList.add('hidden');
+            pptOptions.classList.add('hidden');
+            pptDownloadLink.classList.add('hidden');
+            pptProgressContainer.classList.add('hidden');
+            if (pptBlobUrl) {
+                URL.revokeObjectURL(pptBlobUrl);
+                pptBlobUrl = null;
+            }
+            pptFileInput.value = '';
+        }
+        
+        async function handlePptFile(file) {
+            if (!file || file.type !== 'application/pdf') {
+                showNotification('Please select a valid PDF file', 'error');
+                return;
+            }
+            
+            try {
+                pptUploadedFile = file;
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                
+                const pageCount = pdf.numPages;
+                pptFileInfo.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                            <i data-lucide="file-text" class="w-6 h-6 text-red-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-800">${file.name}</p>
+                            <p class="text-sm text-gray-500">${formatFileSize(file.size)} • ${pageCount} page${pageCount !== 1 ? 's' : ''}</p>
+                        </div>
+                    </div>
+                `;
+                
+                pptBtn.disabled = false;
+                pptFileSection.classList.remove('hidden');
+                pptOptions.classList.remove('hidden');
+                pptDownloadLink.classList.add('hidden');
+                lucide.createIcons();
+            } catch (error) {
+                console.error('Error reading PDF:', error);
+                showNotification('Failed to read the PDF file', 'error');
+            }
+        }
+        
+        async function convertToPpt() {
+            if (!pptUploadedFile) return;
+            
+            pptBtn.disabled = true;
+            pptLoader.classList.remove('hidden');
+            pptDownloadLink.classList.add('hidden');
+            pptProgressContainer.classList.remove('hidden');
+            
+            try {
+                const arrayBuffer = await pptUploadedFile.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                const numPages = pdf.numPages;
+                
+                const preserveAspect = document.getElementById('preserve-aspect').checked;
+                const highQuality = document.getElementById('high-quality').checked;
+                const scale = highQuality ? 2 : 1.5;
+                
+                const pptx = new PptxGenJS();
+                pptx.defineLayout({ name:'A4', width:10, height:7.5 });
+                pptx.layout = 'A4';
+                
+                for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                    const progress = Math.round((pageNum / numPages) * 100);
+                    pptProgressBar.style.width = `${progress}%`;
+                    pptProgressText.textContent = `${progress}%`;
+                    
+                    const page = await pdf.getPage(pageNum);
+                    const viewport = page.getViewport({ scale });
+                    
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    await page.render({ canvasContext: context, viewport: viewport }).promise;
+                    const imgData = canvas.toDataURL('image/png');
+                    
+                    const slide = pptx.addSlide();
+                    
+                    if (preserveAspect) {
+                        slide.addImage({
+                            data: imgData,
+                            x: 0, y: 0,
+                            w: '100%', h: '100%',
+                            sizing: { type: 'contain', w: 10, h: 7.5 }
+                        });
+                    } else {
+                        slide.addImage({
+                            data: imgData,
+                            x: 0, y: 0,
+                            w: 10, h: 7.5
+                        });
+                    }
+                }
+                
+                pptProgressBar.style.width = '100%';
+                pptProgressText.textContent = '100%';
+                
+                const fileName = `${pptUploadedFile.name.replace('.pdf', '')}.pptx`;
+                await pptx.writeFile({ fileName });
+                
+                pptLoader.classList.add('hidden');
+                showNotification('PDF converted to PowerPoint successfully!');
+            } catch (error) {
+                console.error('Error converting to PPT:', error);
+                showNotification(error.message || 'Failed to convert PDF to PowerPoint', 'error');
+                pptLoader.classList.add('hidden');
+                pptBtn.disabled = false;
+            }
+        }
+        
+        // Initialize
+        renderFileList();
     </script>
 </body>
 </html>
