@@ -33,6 +33,25 @@ Built using **HTML, TailwindCSS, JavaScript, PDF-Lib, PDF.js, JSZip, SortableJS,
 * Live progress bar
 * Download as `.pptx`
 
+### ✏️ **PDF Annotation**
+
+* Upload any PDF document (forms, reports, etc.)
+* Annotate with multiple tools:
+
+  * **Text boxes** - Add text anywhere on the page
+  * **Highlighter** - Highlight text with semi-transparent overlay
+  * **Arrows** - Draw arrows to point to specific content
+  * **Shapes** - Draw rectangles, circles, and lines
+* Customize annotations:
+
+  * Choose from any color
+  * Adjust line thickness
+  * Move and resize annotations
+  * Delete individual annotations or clear all
+* Navigate between pages while preserving annotations
+* Download annotated PDF with all changes burned in
+* Touch-friendly for mobile devices
+
 ### 🔐 **100% Client-Side**
 
 All processing happens inside the browser.
@@ -42,14 +61,14 @@ No files are uploaded, stored, or sent to any server.
 
 ## 🛠️ Technologies Used
 
-| Library / Tool  | Purpose                                |
-| --------------- | -------------------------------------- |
-| **TailwindCSS** | UI styling                             |
-| **PDF-Lib**     | Merging & splitting PDFs               |
-| **SortableJS**  | Drag-and-drop file ordering            |
-| **JSZip**       | Creating ZIP archives for split files  |
-| **PDF.js**      | Rendering PDF pages for PPT conversion |
-| **PptxGenJS**   | Generating PowerPoint presentations    |
+| Library / Tool  | Purpose                                              |
+| --------------- | ---------------------------------------------------- |
+| **TailwindCSS** | UI styling                                           |
+| **PDF-Lib**     | Merging, splitting PDFs & burning annotations        |
+| **SortableJS**  | Drag-and-drop file ordering                          |
+| **JSZip**       | Creating ZIP archives for split files                |
+| **PDF.js**      | Rendering PDF pages for PPT conversion & annotation  |
+| **PptxGenJS**   | Generating PowerPoint presentations                  |
 
 ---
 
@@ -104,6 +123,18 @@ cd pdf-tools-suite
 * Renders each page as a canvas image using **PDF.js**
 * Inserts each image as a slide in **PptxGenJS**
 * Exports the `.pptx` file client-side
+
+### PDF Annotation
+
+* Renders PDF pages using **PDF.js** on a canvas
+* Overlays a second canvas for drawing annotations
+* Stores annotations as objects with type, coordinates, and properties
+* Supports multiple annotation types: text, highlight, arrow, rectangle, circle, line
+* On download, uses **PDF-Lib** to burn annotations into the PDF:
+  * Converts canvas coordinates to PDF coordinates
+  * Draws text, shapes, and highlights using PDF-lib's graphics API
+  * Preserves original PDF quality while adding annotations
+* All processing happens client-side with no server uploads
 
 ---
 
