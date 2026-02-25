@@ -68,42 +68,44 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <!-- PptxGenJS for creating PowerPoint files -->
     <script src="https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <!-- SheetJS for creating Excel files -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         * {
             font-family: 'Inter', sans-serif;
         }
-        
+
         .glass-effect {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
-        
+
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        
+
         .gradient-text {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .modern-card {
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             transition: all 0.3s ease;
         }
-        
+
         .modern-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.06);
         }
-        
+
         .modern-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -113,18 +115,18 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-        
+
         .modern-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        
+
         .modern-button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
-        
+
         .modern-tab {
             position: relative;
             padding: 12px 24px;
@@ -133,15 +135,15 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .modern-tab:hover {
             color: #374151;
         }
-        
+
         .modern-tab.active {
             color: #667eea;
         }
-        
+
         .modern-tab.active::after {
             content: '';
             position: absolute;
@@ -152,7 +154,7 @@
             background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
             border-radius: 3px 3px 0 0;
         }
-        
+
         .drop-zone {
             border: 2px dashed #e5e7eb;
             border-radius: 16px;
@@ -162,18 +164,18 @@
             cursor: pointer;
             background: #f9fafb;
         }
-        
+
         .drop-zone:hover {
             border-color: #667eea;
             background: #f0f4ff;
         }
-        
+
         .drop-zone.drag-over {
             border-color: #667eea;
             background: #e0e7ff;
             transform: scale(1.02);
         }
-        
+
         .file-item {
             background: #f9fafb;
             border-radius: 12px;
@@ -183,54 +185,54 @@
             align-items: center;
             transition: all 0.3s ease;
         }
-        
+
         .file-item:hover {
             background: #f3f4f6;
             transform: translateX(4px);
         }
-        
+
         .progress-bar {
             height: 8px;
             background: #e5e7eb;
             border-radius: 4px;
             overflow: hidden;
         }
-        
+
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
             border-radius: 4px;
             transition: width 0.3s ease;
         }
-        
+
         .skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
         }
-        
+
         @keyframes loading {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
-        
+
         .sortable-ghost {
             opacity: 0.4;
             background: #e0e7ff;
         }
-        
+
         .sortable-drag {
             opacity: 0.9;
         }
-        
+
         .drag-handle {
             cursor: grab;
         }
-        
+
         .drag-handle:active {
             cursor: grabbing;
         }
-        
+
         .notification {
             position: fixed;
             top: 20px;
@@ -241,7 +243,7 @@
             z-index: 1000;
             animation: slideIn 0.3s ease;
         }
-        
+
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
@@ -252,26 +254,26 @@
                 opacity: 1;
             }
         }
-        
+
         .notification.success {
             background: #10b981;
             color: white;
         }
-        
+
         .notification.error {
             background: #ef4444;
             color: white;
         }
-        
+
         .notification.info {
             background: #3b82f6;
             color: white;
         }
-        
+
         .floating-icon {
             animation: float 3s ease-in-out infinite;
         }
-        
+
         .warning-message {
             background-color: #fef3c7;
             border-left: 4px solid #f59e0b;
@@ -419,6 +421,156 @@
             color: #374151;
             min-width: 30px;
         }
+
+        /* Dark Mode Styles */
+        html.dark body {
+            background: linear-gradient(to bottom right, #0f172a, #1e1b4b, #0f172a);
+        }
+
+        html.dark .modern-card {
+            background: #1e293b;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        html.dark .modern-card:hover {
+            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.5), 0 15px 15px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        html.dark .glass-effect {
+            background: rgba(30, 41, 59, 0.95);
+        }
+
+        html.dark .text-gray-600 {
+            color: #94a3b8;
+        }
+
+        html.dark .text-gray-800 {
+            color: #e2e8f0;
+        }
+
+        html.dark .text-gray-500 {
+            color: #64748b;
+        }
+
+        html.dark .bg-gray-100 {
+            background-color: #334155;
+        }
+
+        html.dark .border-gray-200 {
+            border-color: #334155;
+        }
+
+        html.dark .border-t {
+            border-top-color: #334155;
+        }
+
+        html.dark .drop-zone {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        html.dark .drop-zone:hover {
+            border-color: #667eea;
+            background: #1e3a5f;
+        }
+
+        html.dark .drop-zone.drag-over {
+            border-color: #667eea;
+            background: #1e40af;
+        }
+
+        html.dark .file-item {
+            background: #1e293b;
+        }
+
+        html.dark .file-item:hover {
+            background: #334155;
+        }
+
+        html.dark .modern-tab {
+            color: #94a3b8;
+        }
+
+        html.dark .modern-tab:hover {
+            color: #e2e8f0;
+        }
+
+        html.dark .modern-tab.active {
+            color: #667eea;
+        }
+
+        html.dark .text-input-overlay {
+            background: #1e293b;
+            border-color: #667eea;
+        }
+
+        html.dark .text-input-overlay .btn-cancel {
+            background: #374151;
+            color: #e2e8f0;
+        }
+
+        html.dark .text-input-overlay .btn-cancel:hover {
+            background: #4b5563;
+        }
+
+        html.dark .text-size-controls {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        html.dark .text-size-controls label {
+            color: #94a3b8;
+        }
+
+        html.dark .text-size-controls span {
+            color: #e2e8f0;
+        }
+
+        html.dark .inline-text-editor {
+            border-color: #667eea;
+        }
+
+        html.dark .inline-text-editor:focus {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        html.dark .progress-bar {
+            background: #334155;
+        }
+
+        html.dark .warning-message {
+            background-color: #451a03;
+            border-left-color: #f59e0b;
+        }
+
+        /* Dark mode toggle button */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e5e7eb;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        html.dark .dark-mode-toggle {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: #475569;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
@@ -426,6 +578,24 @@
     <div class="fixed inset-0 opacity-5">
         <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23000000" fill-opacity="0.1"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
     </div>
+
+    <!-- Dark Mode Toggle -->
+    <button id="dark-mode-toggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+        <svg id="dark-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-gray-700">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </svg>
+        <svg id="light-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-yellow-500 hidden">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2"/>
+            <path d="M12 20v2"/>
+            <path d="m4.93 4.93 1.41 1.41"/>
+            <path d="m17.66 17.66 1.41 1.41"/>
+            <path d="M2 12h2"/>
+            <path d="M20 12h2"/>
+            <path d="m6.34 17.66-1.41 1.41"/>
+            <path d="m19.07 4.93-1.41 1.41"/>
+        </svg>
+    </button>
 
     <main class="relative z-10 flex-grow flex items-center justify-center p-4">
         <div class="modern-card w-full max-w-4xl p-8">
@@ -616,7 +786,7 @@
                         <input type="file" id="ppt-file-input" accept=".pdf" class="hidden">
                         <div class="flex justify-center gap-2">
                             <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">PDF</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Convert to PPT</span>
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Convert</span>
                         </div>
                     </div>
 
@@ -631,9 +801,58 @@
                         <div id="ppt-file-info" class="bg-gray-50 p-4 rounded-xl"></div>
                     </div>
 
-                    <!-- Conversion Options -->
+                    <!-- Conversion Mode Selection -->
+                    <div id="conversion-mode-selection" class="hidden">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Select conversion type</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg cursor-pointer hover:from-purple-100 hover:to-pink-100 transition border-2 border-transparent has-[:checked]:border-purple-500">
+                                <input type="radio" name="conversion-mode" id="convert-ppt-mode" value="ppt" checked class="mr-3">
+                                <div class="flex-1">
+                                    <div class="font-semibold text-gray-800">Convert to PowerPoint (PPTX)</div>
+                                    <div class="text-sm text-gray-500">Convert each PDF page into a PowerPoint slide</div>
+                                </div>
+                                <i data-lucide="presentation" class="w-6 h-6 text-purple-500"></i>
+                            </label>
+                            <label class="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg cursor-pointer hover:from-green-100 hover:to-emerald-100 transition border-2 border-transparent has-[:checked]:border-green-500">
+                                <input type="radio" name="conversion-mode" id="convert-excel-mode" value="excel" class="mr-3">
+                                <div class="flex-1">
+                                    <div class="font-semibold text-gray-800">Convert to Excel (.xlsx)</div>
+                                    <div class="text-sm text-gray-500">Extract tables and data from PDF into Excel spreadsheet</div>
+                                </div>
+                                <i data-lucide="table" class="w-6 h-6 text-green-500"></i>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Excel Accuracy Disclaimer -->
+                    <div id="excel-disclaimer" class="hidden bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
+                        <div class="flex items-start">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 mr-3 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="font-semibold text-amber-800 mb-2">Conversion Accuracy Notice</h4>
+                                <p class="text-sm text-amber-700 mb-2">This PDF to Excel converter works best with <strong>simple, native PDFs</strong> containing clear tabular structures.</p>
+                                <div class="text-sm text-amber-700 space-y-1">
+                                    <p class="font-medium">✓ Best results with:</p>
+                                    <ul class="ml-4 list-disc space-y-0.5">
+                                        <li>Native PDFs (not scanned images)</li>
+                                        <li>Clear, consistent table layouts</li>
+                                        <li>Standard fonts and spacing</li>
+                                    </ul>
+                                    <p class="font-medium mt-2">✗ May have reduced accuracy with:</p>
+                                    <ul class="ml-4 list-disc space-y-0.5">
+                                        <li>Scanned documents or images</li>
+                                        <li>Complex layouts with multiple columns</li>
+                                        <li>Heavily formatted tables or merged cells</li>
+                                    </ul>
+                                </div>
+                                <p class="text-xs text-amber-600 mt-3 italic">Since this is 100% client-side (for your privacy), conversion happens entirely in your browser. We continuously improve our algorithms, but perfect conversion isn't always possible.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PowerPoint Conversion Options -->
                     <div id="ppt-options" class="hidden">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Conversion options</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">PowerPoint options</h3>
                         <div class="space-y-3">
                             <label class="flex items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition">
                                 <input type="checkbox" id="preserve-aspect" checked class="mr-3">
@@ -644,6 +863,28 @@
                                 <input type="checkbox" id="high-quality" checked class="mr-3">
                                 <span class="flex-1">High quality conversion</span>
                                 <i data-lucide="sparkles" class="w-5 h-5 text-gray-400"></i>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Excel Conversion Options -->
+                    <div id="excel-options" class="hidden">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Excel options</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition">
+                                <input type="checkbox" id="excel-detect-multiple" checked class="mr-3">
+                                <span class="flex-1">Detect multiple tables per page</span>
+                                <i data-lucide="layers" class="w-5 h-5 text-gray-400"></i>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition">
+                                <input type="checkbox" id="excel-page-numbers" checked class="mr-3">
+                                <span class="flex-1">Include page numbers in sheet names</span>
+                                <i data-lucide="hash" class="w-5 h-5 text-gray-400"></i>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition">
+                                <input type="checkbox" id="excel-auto-headers" checked class="mr-3">
+                                <span class="flex-1">Auto-detect headers (first row)</span>
+                                <i data-lucide="heading" class="w-5 h-5 text-gray-400"></i>
                             </label>
                         </div>
                     </div>
@@ -740,6 +981,20 @@
                                     <span id="annotation-size-value" class="text-sm text-gray-600 w-6">3</span>
                                 </div>
 
+                                <!-- Zoom Controls -->
+                                <div class="flex items-center gap-1 bg-white rounded-lg p-1 border">
+                                    <button id="zoom-out" class="p-2 rounded hover:bg-gray-100 transition" title="Zoom Out">
+                                        <i data-lucide="minus" class="w-4 h-4"></i>
+                                    </button>
+                                    <span id="zoom-level" class="text-sm text-gray-600 px-2 min-w-[50px] text-center">100%</span>
+                                    <button id="zoom-in" class="p-2 rounded hover:bg-gray-100 transition" title="Zoom In">
+                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                    </button>
+                                    <button id="zoom-fit" class="p-2 rounded hover:bg-gray-100 transition" title="Fit to Width">
+                                        <i data-lucide="maximize" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+
                                 <!-- Delete Button -->
                                 <button id="tool-delete" class="p-2 rounded hover:bg-red-100 text-red-500 transition" title="Delete Selected">
                                     <i data-lucide="trash-2" class="w-5 h-5"></i>
@@ -802,7 +1057,7 @@
     <!-- Footer -->
    <footer class="relative z-10 glass-effect border-t border-gray-200 py-6 px-4 text-center">
     <p class="text-gray-600 flex items-center justify-center gap-2">
-        Built with love <i data-lucide="heart" class="w-4 h-4 text-red-500 fill-red-500"></i> by 
+        made with <i data-lucide="heart" class="w-4 h-4 text-red-500 fill-red-500"></i> by
         <a href="https://milhaniq.com/" target="_blank" class="text-blue-600 hover:underline">
             milhaniq.com
         </a>
@@ -813,1731 +1068,45 @@
     <!-- Notification Container -->
     <div id="notification-container"></div>
 
+    <!-- Dark Mode Toggle Script -->
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const darkIcon = document.getElementById('dark-icon');
+            const lightIcon = document.getElementById('light-icon');
+            const html = document.documentElement;
 
-        // Set the worker source for PDF.js
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        
-        // Mode switching
-        const mergeTab = document.getElementById('merge-tab');
-        const splitTab = document.getElementById('split-tab');
-        const pptTab = document.getElementById('ppt-tab');
-        const mergeContent = document.getElementById('merge-content');
-        const splitContent = document.getElementById('split-content');
-        const pptContent = document.getElementById('ppt-content');
-        
-        // Note: Annotate tab event listeners are set up later after annotateTab and annotateContent are defined
-        
-        mergeTab.addEventListener('click', () => {
-            const allTabs = [splitTab, pptTab, annotateTab].filter(Boolean);
-            const allContents = [splitContent, pptContent, annotateContent].filter(Boolean);
-            setActiveTab(mergeTab, allTabs, mergeContent, allContents);
-        });
-        
-        splitTab.addEventListener('click', () => {
-            const allTabs = [mergeTab, pptTab, annotateTab].filter(Boolean);
-            const allContents = [mergeContent, pptContent, annotateContent].filter(Boolean);
-            setActiveTab(splitTab, allTabs, splitContent, allContents);
-        });
-        
-        pptTab.addEventListener('click', () => {
-            const allTabs = [mergeTab, splitTab, annotateTab].filter(Boolean);
-            const allContents = [mergeContent, splitContent, annotateContent].filter(Boolean);
-            setActiveTab(pptTab, allTabs, pptContent, allContents);
-        });
-        
-        function setActiveTab(activeTab, inactiveTabs, activeContent, inactiveContents) {
-            activeTab.classList.add('active');
-            inactiveTabs.forEach(tab => tab.classList.remove('active'));
-            activeContent.classList.remove('hidden');
-            inactiveContents.forEach(content => content.classList.add('hidden'));
-        }
-        
-        // Split option change handler
-        document.querySelectorAll('input[name="split-option"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                const rangeInput = document.getElementById('range-input');
-                const mergeOptionContainer = document.getElementById('merge-option-container');
-                const reuploadWarning = document.getElementById('reupload-warning');
-                
-                if (e.target.value === 'range') {
-                    rangeInput.classList.remove('hidden');
-                    mergeOptionContainer.classList.remove('hidden');
-                } else {
-                    rangeInput.classList.add('hidden');
-                    mergeOptionContainer.classList.add('hidden');
-                }
-                
-                // Reset reupload warning when changing split options
-                reuploadWarning.classList.add('hidden');
-            });
-        });
-        
-        // Merge split files checkbox change handler
-        document.getElementById('merge-split-files').addEventListener('change', (e) => {
-            const reuploadWarning = document.getElementById('reupload-warning');
-            
-            if (hasSplitFile) {
-                reuploadWarning.classList.remove('hidden');
-                e.target.checked = !e.target.checked; // Toggle back to previous state
-                showNotification('Please reupload the file to change the merge option', 'info');
-            }
-        });
-        
-        // Notification system
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <div class="flex items-center gap-3">
-                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" class="w-5 h-5"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            document.getElementById('notification-container').appendChild(notification);
-            lucide.createIcons();
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideIn 0.3s ease reverse';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-        
-        // Merge functionality
-        const mergeDropZone = document.getElementById('merge-drop-zone');
-        const mergeFileInput = document.getElementById('merge-file-input');
-        const mergeFileList = document.getElementById('merge-file-list');
-        const mergeBtn = document.getElementById('merge-btn');
-        const mergeLoader = document.getElementById('merge-loader');
-        const mergeDownloadLink = document.getElementById('merge-download-link');
-        const mergeClearAllBtn = document.getElementById('merge-clear-all');
-        const mergeFileSection = document.getElementById('merge-file-section');
-        
-        let uploadedFiles = [];
-        let sortable;
-        let mergeBlobUrl = null;
+            // Check for saved preference or system preference
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        function initSortable() {
-            if (sortable) {
-                sortable.destroy();
+            // Apply saved theme or system preference
+            if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+                html.classList.add('dark');
+                if (darkIcon) darkIcon.classList.add('hidden');
+                if (lightIcon) lightIcon.classList.remove('hidden');
             }
-            
-            sortable = new Sortable(mergeFileList, {
-                animation: 150,
-                ghostClass: 'sortable-ghost',
-                dragClass: 'sortable-drag',
-                handle: '.drag-handle',
-                onEnd: function(evt) {
-                    const item = uploadedFiles.splice(evt.oldIndex, 1)[0];
-                    uploadedFiles.splice(evt.newIndex, 0, item);
-                }
-            });
-        }
 
-        // Event listeners for merge
-        mergeDropZone.addEventListener('click', () => mergeFileInput.click());
-        
-        mergeDropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            mergeDropZone.classList.add('drag-over');
-        });
-        
-        mergeDropZone.addEventListener('dragleave', () => {
-            mergeDropZone.classList.remove('drag-over');
-        });
-        
-        mergeDropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            mergeDropZone.classList.remove('drag-over');
-            handleFiles(e.dataTransfer.files);
-        });
-        
-        mergeFileInput.addEventListener('change', (e) => {
-            handleFiles(e.target.files);
-        });
-        
-        mergeClearAllBtn.addEventListener('click', () => {
-            uploadedFiles = [];
-            renderFileList();
-            mergeBtn.disabled = true;
-            mergeFileSection.classList.add('hidden');
-            mergeDownloadLink.classList.add('hidden');
-            if (mergeBlobUrl) {
-                URL.revokeObjectURL(mergeBlobUrl);
-                mergeBlobUrl = null;
-            }
-            mergeFileInput.value = '';
-        });
-        
-        mergeBtn.addEventListener('click', mergePDFs);
-        
-        async function handleFiles(files) {
-            for (let i = 0; i < files.length; i++) {
-                if (files[i].type === 'application/pdf') {
-                    try {
-                        const arrayBuffer = await files[i].arrayBuffer();
-                        uploadedFiles.push({
-                            file: files[i],
-                            content: arrayBuffer,
-                            name: files[i].name,
-                            size: files[i].size
-                        });
-                    } catch (error) {
-                        console.error('Error reading file:', error);
-                        showNotification(`Could not read file "${files[i].name}"`, 'error');
-                    }
+            // Toggle dark mode
+            darkModeToggle.addEventListener('click', () => {
+                html.classList.toggle('dark');
+                const isDark = html.classList.contains('dark');
+                
+                // Toggle icons
+                if (isDark) {
+                    if (darkIcon) darkIcon.classList.add('hidden');
+                    if (lightIcon) lightIcon.classList.remove('hidden');
+                    localStorage.setItem('theme', 'dark');
                 } else {
-                    showNotification(`"${files[i].name}" is not a PDF file`, 'error');
-                }
-            }
-            renderFileList();
-            mergeBtn.disabled = uploadedFiles.length === 0;
-            mergeFileSection.classList.toggle('hidden', uploadedFiles.length === 0);
-        }
-        
-        function renderFileList() {
-            mergeFileList.innerHTML = '';
-            
-            if (uploadedFiles.length === 0) {
-                return;
-            }
-            
-            uploadedFiles.forEach((fileObj, index) => {
-                const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
-                fileItem.innerHTML = `
-                    <div class="drag-handle mr-3 text-gray-400 hover:text-gray-600">
-                        <i data-lucide="grip-vertical" class="w-5 h-5"></i>
-                    </div>
-                    <div class="flex-1 flex items-center">
-                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
-                            <i data-lucide="file-text" class="w-5 h-5 text-red-500"></i>
-                        </div>
-                        <div>
-                            <p class="font-medium text-gray-800">${fileObj.name}</p>
-                            <p class="text-xs text-gray-500">${formatFileSize(fileObj.size)}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="text-sm text-gray-500 mr-2">${index + 1}</span>
-                        <button class="remove-file text-red-500 hover:text-red-700" data-index="${index}">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                `;
-                mergeFileList.appendChild(fileItem);
-            });
-            
-            document.querySelectorAll('.remove-file').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const index = parseInt(e.currentTarget.getAttribute('data-index'));
-                    uploadedFiles.splice(index, 1);
-                    renderFileList();
-                    mergeBtn.disabled = uploadedFiles.length === 0;
-                    mergeFileSection.classList.toggle('hidden', uploadedFiles.length === 0);
-                    mergeDownloadLink.classList.add('hidden');
-                    if (mergeBlobUrl) {
-                        URL.revokeObjectURL(mergeBlobUrl);
-                        mergeBlobUrl = null;
-                    }
-                });
-            });
-            
-            initSortable();
-            lucide.createIcons();
-        }
-        
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-        
-        async function mergePDFs() {
-            if (uploadedFiles.length === 0) return;
-            
-            mergeBtn.disabled = true;
-            mergeLoader.classList.remove('hidden');
-            mergeDownloadLink.classList.add('hidden');
-            
-            try {
-                const mergedPdf = await PDFLib.PDFDocument.create();
-                
-                for (const fileObj of uploadedFiles) {
-                    try {
-                        const pdf = await PDFLib.PDFDocument.load(fileObj.content);
-                        const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-                        pages.forEach(page => mergedPdf.addPage(page));
-                    } catch (error) {
-                        console.error('Error processing PDF:', error);
-                        throw new Error(`Failed to process "${fileObj.name}"`);
-                    }
-                }
-                
-                const mergedPdfBytes = await mergedPdf.save();
-                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-                
-                if (mergeBlobUrl) {
-                    URL.revokeObjectURL(mergeBlobUrl);
-                }
-                
-                mergeBlobUrl = URL.createObjectURL(blob);
-                mergeDownloadLink.href = mergeBlobUrl;
-                mergeDownloadLink.download = 'merged.pdf';
-                mergeDownloadLink.classList.remove('hidden');
-                mergeLoader.classList.add('hidden');
-                showNotification('PDFs merged successfully!');
-            } catch (error) {
-                console.error('Error merging PDFs:', error);
-                showNotification(error.message || 'Failed to merge PDFs', 'error');
-                mergeLoader.classList.add('hidden');
-                mergeBtn.disabled = false;
-            }
-        }
-        
-        // Split functionality
-        const splitDropZone = document.getElementById('split-drop-zone');
-        const splitFileInput = document.getElementById('split-file-input');
-        const splitFileInfo = document.getElementById('split-file-info');
-        const splitBtn = document.getElementById('split-btn');
-        const splitLoader = document.getElementById('split-loader');
-        const splitDownloadLink = document.getElementById('split-download-link');
-        const splitMergedDownloadLink = document.getElementById('split-merged-download-link');
-        const splitClearBtn = document.getElementById('split-clear');
-        const splitFileSection = document.getElementById('split-file-section');
-        const splitOptions = document.getElementById('split-options');
-        
-        let uploadedFile = null;
-        let pdfDoc = null;
-        let splitBlobUrl = null;
-        let splitMergedBlobUrl = null;
-        let hasSplitFile = false;
-        
-        splitDropZone.addEventListener('click', () => splitFileInput.click());
-        
-        splitDropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            splitDropZone.classList.add('drag-over');
-        });
-        
-        splitDropZone.addEventListener('dragleave', () => {
-            splitDropZone.classList.remove('drag-over');
-        });
-        
-        splitDropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            splitDropZone.classList.remove('drag-over');
-            handleSplitFile(e.dataTransfer.files[0]);
-        });
-        
-        splitFileInput.addEventListener('change', (e) => {
-            handleSplitFile(e.target.files[0]);
-        });
-        
-        splitClearBtn.addEventListener('click', () => {
-            resetSplitState();
-        });
-        
-        splitBtn.addEventListener('click', splitPDF);
-        
-        function resetSplitState() {
-            uploadedFile = null;
-            pdfDoc = null;
-            hasSplitFile = false;
-            splitFileInfo.innerHTML = '';
-            splitBtn.disabled = true;
-            splitFileSection.classList.add('hidden');
-            splitOptions.classList.add('hidden');
-            splitDownloadLink.classList.add('hidden');
-            splitMergedDownloadLink.classList.add('hidden');
-            document.getElementById('reupload-warning').classList.add('hidden');
-            if (splitBlobUrl) {
-                URL.revokeObjectURL(splitBlobUrl);
-                splitBlobUrl = null;
-            }
-            if (splitMergedBlobUrl) {
-                URL.revokeObjectURL(splitMergedBlobUrl);
-                splitMergedBlobUrl = null;
-            }
-            splitFileInput.value = '';
-        }
-        
-        async function handleSplitFile(file) {
-            if (!file || file.type !== 'application/pdf') {
-                showNotification('Please select a valid PDF file', 'error');
-                return;
-            }
-            
-            try {
-                uploadedFile = file;
-                const arrayBuffer = await file.arrayBuffer();
-                pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-                
-                const pageCount = pdfDoc.getPageCount();
-                splitFileInfo.innerHTML = `
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
-                            <i data-lucide="file-text" class="w-6 h-6 text-red-500"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-800">${file.name}</p>
-                            <p class="text-sm text-gray-500">${formatFileSize(file.size)} • ${pageCount} page${pageCount !== 1 ? 's' : ''}</p>
-                        </div>
-                    </div>
-                `;
-                
-                splitBtn.disabled = false;
-                splitFileSection.classList.remove('hidden');
-                splitOptions.classList.remove('hidden');
-                splitDownloadLink.classList.add('hidden');
-                splitMergedDownloadLink.classList.add('hidden');
-                hasSplitFile = false;
-                document.getElementById('reupload-warning').classList.add('hidden');
-                lucide.createIcons();
-            } catch (error) {
-                console.error('Error reading PDF:', error);
-                showNotification('Failed to read the PDF file', 'error');
-            }
-        }
-        
-        async function splitPDF() {
-            if (!pdfDoc) return;
-            
-            splitBtn.disabled = true;
-            splitLoader.classList.remove('hidden');
-            splitDownloadLink.classList.add('hidden');
-            splitMergedDownloadLink.classList.add('hidden');
-            
-            try {
-                const pageCount = pdfDoc.getPageCount();
-                const splitOption = document.querySelector('input[name="split-option"]:checked').value;
-                const mergeSplitFiles = document.getElementById('merge-split-files').checked;
-                
-                // Create split PDFs
-                const splitPdfs = [];
-                
-                if (splitOption === 'pages') {
-                    for (let i = 0; i < pageCount; i++) {
-                        const newPdf = await PDFLib.PDFDocument.create();
-                        const [page] = await newPdf.copyPages(pdfDoc, [i]);
-                        newPdf.addPage(page);
-                        
-                        const pdfBytes = await newPdf.save();
-                        splitPdfs.push({
-                            bytes: pdfBytes,
-                            name: `${uploadedFile.name.replace('.pdf', '')}_page_${i + 1}.pdf`
-                        });
-                    }
-                } else if (splitOption === 'range') {
-                    const pageRanges = document.getElementById('page-ranges').value;
-                    const ranges = parsePageRanges(pageRanges, pageCount);
-                    
-                    for (let i = 0; i < ranges.length; i++) {
-                        const [start, end] = ranges[i];
-                        const newPdf = await PDFLib.PDFDocument.create();
-                        const pages = await newPdf.copyPages(pdfDoc, Array.from({length: end - start + 1}, (_, j) => start + j - 1));
-                        pages.forEach(page => newPdf.addPage(page));
-                        
-                        const pdfBytes = await newPdf.save();
-                        splitPdfs.push({
-                            bytes: pdfBytes,
-                            name: `${uploadedFile.name.replace('.pdf', '')}_pages_${start}-${end}.pdf`
-                        });
-                    }
-                }
-                
-                // Handle merge option
-                if (splitOption === 'range' && mergeSplitFiles) {
-                    // Create a merged PDF from all the split PDFs
-                    const mergedPdf = await PDFLib.PDFDocument.create();
-                    
-                    for (const splitPdf of splitPdfs) {
-                        const pdf = await PDFLib.PDFDocument.load(splitPdf.bytes);
-                        const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-                        pages.forEach(page => mergedPdf.addPage(page));
-                    }
-                    
-                    const mergedPdfBytes = await mergedPdf.save();
-                    const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-                    
-                    if (splitMergedBlobUrl) {
-                        URL.revokeObjectURL(splitMergedBlobUrl);
-                    }
-                    
-                    splitMergedBlobUrl = URL.createObjectURL(blob);
-                    splitMergedDownloadLink.href = splitMergedBlobUrl;
-                    splitMergedDownloadLink.download = `${uploadedFile.name.replace('.pdf', '')}_merged.pdf`;
-                    splitMergedDownloadLink.classList.remove('hidden');
-                    
-                    showNotification('PDF split and merged successfully!');
-                } else {
-                    // Create a ZIP file with all the split PDFs
-                    const zip = new JSZip();
-                    
-                    for (const splitPdf of splitPdfs) {
-                        zip.file(splitPdf.name, splitPdf.bytes);
-                    }
-                    
-                    const zipBlob = await zip.generateAsync({type: 'blob'});
-                    
-                    if (splitBlobUrl) {
-                        URL.revokeObjectURL(splitBlobUrl);
-                    }
-                    
-                    splitBlobUrl = URL.createObjectURL(zipBlob);
-                    splitDownloadLink.href = splitBlobUrl;
-                    splitDownloadLink.download = `${uploadedFile.name.replace('.pdf', '')}_split.zip`;
-                    splitDownloadLink.classList.remove('hidden');
-                    
-                    showNotification('PDF split successfully!');
-                }
-                
-                // Mark that the file has been split
-                hasSplitFile = true;
-                
-                // Show reupload warning if using split by range
-                if (splitOption === 'range') {
-                    document.getElementById('reupload-warning').classList.remove('hidden');
-                }
-                
-                splitLoader.classList.add('hidden');
-            } catch (error) {
-                console.error('Error splitting PDF:', error);
-                showNotification(error.message || 'Failed to split PDF', 'error');
-                splitLoader.classList.add('hidden');
-                splitBtn.disabled = false;
-            }
-        }
-        
-        function parsePageRanges(input, maxPage) {
-            const ranges = [];
-            const parts = input.split(',');
-            
-            for (const part of parts) {
-                const trimmed = part.trim();
-                if (trimmed.includes('-')) {
-                    const [start, end] = trimmed.split('-').map(n => parseInt(n.trim()));
-                    if (isNaN(start) || isNaN(end) || start < 1 || end > maxPage || start > end) {
-                        throw new Error(`Invalid page range: ${trimmed}`);
-                    }
-                    ranges.push([start, end]);
-                } else {
-                    const page = parseInt(trimmed);
-                    if (isNaN(page) || page < 1 || page > maxPage) {
-                        throw new Error(`Invalid page number: ${trimmed}`);
-                    }
-                    ranges.push([page, page]);
-                }
-            }
-            
-            return ranges;
-        }
-        
-        // PDF to PPT functionality
-        const pptDropZone = document.getElementById('ppt-drop-zone');
-        const pptFileInput = document.getElementById('ppt-file-input');
-        const pptFileInfo = document.getElementById('ppt-file-info');
-        const pptBtn = document.getElementById('ppt-btn');
-        const pptLoader = document.getElementById('ppt-loader');
-        const pptDownloadLink = document.getElementById('ppt-download-link');
-        const pptClearBtn = document.getElementById('ppt-clear');
-        const pptProgressContainer = document.getElementById('ppt-progress-container');
-        const pptProgressBar = document.getElementById('ppt-progress-bar');
-        const pptProgressText = document.getElementById('ppt-progress-text');
-        const pptFileSection = document.getElementById('ppt-file-section');
-        const pptOptions = document.getElementById('ppt-options');
-        
-        let pptUploadedFile = null;
-        let pptBlobUrl = null;
-        
-        pptDropZone.addEventListener('click', () => pptFileInput.click());
-        
-        pptDropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            pptDropZone.classList.add('drag-over');
-        });
-        
-        pptDropZone.addEventListener('dragleave', () => {
-            pptDropZone.classList.remove('drag-over');
-        });
-        
-        pptDropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            pptDropZone.classList.remove('drag-over');
-            handlePptFile(e.dataTransfer.files[0]);
-        });
-        
-        pptFileInput.addEventListener('change', (e) => {
-            handlePptFile(e.target.files[0]);
-        });
-        
-        pptClearBtn.addEventListener('click', () => {
-            resetPptState();
-        });
-        
-        pptBtn.addEventListener('click', convertToPpt);
-        
-        function resetPptState() {
-            pptUploadedFile = null;
-            pptFileInfo.innerHTML = '';
-            pptBtn.disabled = true;
-            pptFileSection.classList.add('hidden');
-            pptOptions.classList.add('hidden');
-            pptDownloadLink.classList.add('hidden');
-            pptProgressContainer.classList.add('hidden');
-            if (pptBlobUrl) {
-                URL.revokeObjectURL(pptBlobUrl);
-                pptBlobUrl = null;
-            }
-            pptFileInput.value = '';
-        }
-        
-        async function handlePptFile(file) {
-            if (!file || file.type !== 'application/pdf') {
-                showNotification('Please select a valid PDF file', 'error');
-                return;
-            }
-            
-            try {
-                pptUploadedFile = file;
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-                
-                const pageCount = pdf.numPages;
-                pptFileInfo.innerHTML = `
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
-                            <i data-lucide="file-text" class="w-6 h-6 text-red-500"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-800">${file.name}</p>
-                            <p class="text-sm text-gray-500">${formatFileSize(file.size)} • ${pageCount} page${pageCount !== 1 ? 's' : ''}</p>
-                        </div>
-                    </div>
-                `;
-                
-                pptBtn.disabled = false;
-                pptFileSection.classList.remove('hidden');
-                pptOptions.classList.remove('hidden');
-                pptDownloadLink.classList.add('hidden');
-                lucide.createIcons();
-            } catch (error) {
-                console.error('Error reading PDF:', error);
-                showNotification('Failed to read the PDF file', 'error');
-            }
-        }
-        
-        async function convertToPpt() {
-            if (!pptUploadedFile) return;
-            
-            pptBtn.disabled = true;
-            pptLoader.classList.remove('hidden');
-            pptDownloadLink.classList.add('hidden');
-            pptProgressContainer.classList.remove('hidden');
-            
-            try {
-                const arrayBuffer = await pptUploadedFile.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-                const numPages = pdf.numPages;
-                
-                const preserveAspect = document.getElementById('preserve-aspect').checked;
-                const highQuality = document.getElementById('high-quality').checked;
-                const scale = highQuality ? 2 : 1.5;
-                
-                const pptx = new PptxGenJS();
-                pptx.defineLayout({ name:'A4', width:10, height:7.5 });
-                pptx.layout = 'A4';
-                
-                for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-                    const progress = Math.round((pageNum / numPages) * 100);
-                    pptProgressBar.style.width = `${progress}%`;
-                    pptProgressText.textContent = `${progress}%`;
-                    
-                    const page = await pdf.getPage(pageNum);
-                    const viewport = page.getViewport({ scale });
-                    
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-                    
-                    await page.render({ canvasContext: context, viewport: viewport }).promise;
-                    const imgData = canvas.toDataURL('image/png');
-                    
-                    const slide = pptx.addSlide();
-                    
-                    if (preserveAspect) {
-                        slide.addImage({
-                            data: imgData,
-                            x: 0, y: 0,
-                            w: '100%', h: '100%',
-                            sizing: { type: 'contain', w: 10, h: 7.5 }
-                        });
-                    } else {
-                        slide.addImage({
-                            data: imgData,
-                            x: 0, y: 0,
-                            w: 10, h: 7.5
-                        });
-                    }
-                }
-                
-                pptProgressBar.style.width = '100%';
-                pptProgressText.textContent = '100%';
-                
-                const fileName = `${pptUploadedFile.name.replace('.pdf', '')}.pptx`;
-                await pptx.writeFile({ fileName });
-                
-                pptLoader.classList.add('hidden');
-                showNotification('PDF converted to PowerPoint successfully!');
-            } catch (error) {
-                console.error('Error converting to PPT:', error);
-                showNotification(error.message || 'Failed to convert PDF to PowerPoint', 'error');
-                pptLoader.classList.add('hidden');
-                pptBtn.disabled = false;
-            }
-        }
-        
-        // Initialize
-        renderFileList();
-
-        // ==================== ANNOTATION FUNCTIONALITY ====================
-        
-        // Annotation state management
-        const annotateTab = document.getElementById('annotate-tab');
-        const annotateContent = document.getElementById('annotate-content');
-        const annotateDropZone = document.getElementById('annotate-drop-zone');
-        const annotateFileInput = document.getElementById('annotate-file-input');
-        const annotateViewerSection = document.getElementById('annotate-viewer-section');
-        const annotateClearFileBtn = document.getElementById('annotate-clear-file');
-        const annotateDownloadBtn = document.getElementById('annotate-download-btn');
-        const annotateLoader = document.getElementById('annotate-loader');
-        
-        // PDF viewer elements
-        const pdfCanvas = document.getElementById('pdf-canvas');
-        const annotationCanvas = document.getElementById('annotation-canvas');
-        const pdfCtx = pdfCanvas.getContext('2d');
-        const annotationCtx = annotationCanvas.getContext('2d');
-        const pdfViewerContainer = document.getElementById('pdf-viewer-container');
-        const prevPageBtn = document.getElementById('prev-page');
-        const nextPageBtn = document.getElementById('next-page');
-        const currentPageSpan = document.getElementById('current-page');
-        const totalPagesSpan = document.getElementById('total-pages');
-        
-        // Tool buttons
-        const toolButtons = {
-            select: document.getElementById('tool-select'),
-            text: document.getElementById('tool-text'),
-            highlight: document.getElementById('tool-highlight'),
-            arrow: document.getElementById('tool-arrow'),
-            rect: document.getElementById('tool-rect'),
-            circle: document.getElementById('tool-circle'),
-            line: document.getElementById('tool-line')
-        };
-        
-        const colorPicker = document.getElementById('annotation-color');
-        const sizeSlider = document.getElementById('annotation-size');
-        const sizeValueSpan = document.getElementById('annotation-size-value');
-        const deleteToolBtn = document.getElementById('tool-delete');
-        const clearToolBtn = document.getElementById('tool-clear');
-        
-        // Annotation state
-        let annotatePdfDoc = null;
-        let annotateUploadedFile = null;
-        let currentPageNum = 1;
-        let totalPages = 0;
-        let pdfScale = 1.5;
-        let currentTool = 'select';
-        let isDrawing = false;
-        let startX, startY;
-        let annotations = []; // Store all annotations
-        let selectedAnnotation = null;
-        let tempAnnotation = null;
-        let inlineEditor = null; // Track inline text editor
-        let textSizeControls = null; // Track text size controls
-        
-        // Tab switching for annotate
-        annotateTab.addEventListener('click', () => {
-            setActiveTab(annotateTab, [mergeTab, splitTab, pptTab], annotateContent, [mergeContent, splitContent, pptContent]);
-        });
-        
-        // File upload handling
-        annotateDropZone.addEventListener('click', () => annotateFileInput.click());
-        
-        annotateDropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            annotateDropZone.classList.add('drag-over');
-        });
-        
-        annotateDropZone.addEventListener('dragleave', () => {
-            annotateDropZone.classList.remove('drag-over');
-        });
-        
-        annotateDropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            annotateDropZone.classList.remove('drag-over');
-            handleAnnotateFile(e.dataTransfer.files[0]);
-        });
-        
-        annotateFileInput.addEventListener('change', (e) => {
-            handleAnnotateFile(e.target.files[0]);
-        });
-        
-        annotateClearFileBtn.addEventListener('click', resetAnnotateState);
-        
-        async function handleAnnotateFile(file) {
-            if (!file || file.type !== 'application/pdf') {
-                showNotification('Please select a valid PDF file', 'error');
-                return;
-            }
-            
-            try {
-                annotateUploadedFile = file;
-                const arrayBuffer = await file.arrayBuffer();
-                annotatePdfDoc = await pdfjsLib.getDocument(arrayBuffer).promise;
-                totalPages = annotatePdfDoc.numPages;
-                
-                // Show viewer, hide drop zone
-                annotateDropZone.classList.add('hidden');
-                annotateViewerSection.classList.remove('hidden');
-                
-                // Reset annotations
-                annotations = [];
-                currentPageNum = 1;
-                
-                // Render first page
-                await renderPdfPage(currentPageNum);
-                
-                // Update page info
-                currentPageSpan.textContent = currentPageNum;
-                totalPagesSpan.textContent = totalPages;
-                
-                showNotification('PDF loaded successfully! Start annotating.');
-            } catch (error) {
-                console.error('Error loading PDF:', error);
-                showNotification('Failed to load the PDF file', 'error');
-            }
-        }
-        
-        async function renderPdfPage(pageNum) {
-            if (!annotatePdfDoc) return;
-            
-            try {
-                const page = await annotatePdfDoc.getPage(pageNum);
-                const viewport = page.getViewport({ scale: pdfScale });
-                
-                // Set canvas dimensions
-                pdfCanvas.width = viewport.width;
-                pdfCanvas.height = viewport.height;
-                annotationCanvas.width = viewport.width;
-                annotationCanvas.height = viewport.height;
-                
-                // Set container dimensions
-                pdfViewerContainer.style.width = `${viewport.width}px`;
-                pdfViewerContainer.style.height = `${viewport.height}px`;
-                
-                // Render PDF page
-                const renderContext = {
-                    canvasContext: pdfCtx,
-                    viewport: viewport
-                };
-                
-                await page.render(renderContext).promise;
-                
-                // Re-render annotations for this page
-                renderAnnotations();
-                
-                // Update page navigation buttons
-                prevPageBtn.disabled = pageNum <= 1;
-                nextPageBtn.disabled = pageNum >= totalPages;
-                currentPageSpan.textContent = pageNum;
-                
-            } catch (error) {
-                console.error('Error rendering page:', error);
-            }
-        }
-        
-        // Page navigation
-        prevPageBtn.addEventListener('click', async () => {
-            if (currentPageNum > 1) {
-                currentPageNum--;
-                removeInlineEditor();
-                await renderPdfPage(currentPageNum);
-            }
-        });
-        
-        nextPageBtn.addEventListener('click', async () => {
-            if (currentPageNum < totalPages) {
-                currentPageNum++;
-                removeInlineEditor();
-                await renderPdfPage(currentPageNum);
-            }
-        });
-        
-        // Tool selection
-        Object.keys(toolButtons).forEach(tool => {
-            toolButtons[tool].addEventListener('click', () => {
-                currentTool = tool;
-                selectedAnnotation = null;
-                
-                // Remove inline editor when switching tools
-                removeInlineEditor();
-                
-                // Update active state
-                Object.values(toolButtons).forEach(btn => btn.classList.remove('active'));
-                toolButtons[tool].classList.add('active');
-                
-                // Update cursor
-                updateCursor();
-                
-                // Re-render annotations to clear selection
-                renderAnnotations();
-            });
-        });
-        
-        function updateCursor() {
-            annotationCanvas.classList.remove('cursor-move', 'cursor-pointer', 'cursor-crosshair');
-            
-            if (currentTool === 'select') {
-                annotationCanvas.classList.add('cursor-move');
-            } else if (currentTool === 'text') {
-                annotationCanvas.classList.add('cursor-pointer');
-            } else {
-                annotationCanvas.classList.add('cursor-crosshair');
-            }
-        }
-        
-        // Size slider
-        sizeSlider.addEventListener('input', (e) => {
-            sizeValueSpan.textContent = e.target.value;
-        });
-        
-        // Canvas drawing events
-        annotationCanvas.addEventListener('mousedown', handleMouseDown);
-        annotationCanvas.addEventListener('mousemove', handleMouseMove);
-        annotationCanvas.addEventListener('mouseup', handleMouseUp);
-        annotationCanvas.addEventListener('mouseleave', handleMouseUp);
-        
-        // Touch events for mobile
-        annotationCanvas.addEventListener('touchstart', handleTouchStart);
-        annotationCanvas.addEventListener('touchmove', handleTouchMove);
-        annotationCanvas.addEventListener('touchend', handleTouchEnd);
-        
-        function getCanvasCoordinates(e) {
-            const rect = annotationCanvas.getBoundingClientRect();
-            const scaleX = annotationCanvas.width / rect.width;
-            const scaleY = annotationCanvas.height / rect.height;
-            
-            return {
-                x: (e.clientX - rect.left) * scaleX,
-                y: (e.clientY - rect.top) * scaleY
-            };
-        }
-        
-        function handleMouseDown(e) {
-            const coords = getCanvasCoordinates(e);
-            startX = coords.x;
-            startY = coords.y;
-            isDrawing = true;
-            
-            if (currentTool === 'select') {
-                // Check if clicking on an annotation
-                selectedAnnotation = findAnnotationAt(startX, startY);
-                if (selectedAnnotation) {
-                    // For text annotations, don't open editor immediately - wait to see if it's a drag
-                    if (selectedAnnotation.type !== 'text') {
-                        renderAnnotations();
-                    }
-                } else {
-                    renderAnnotations();
-                }
-            } else if (currentTool === 'text') {
-                // Show text input dialog - pass client coordinates for positioning
-                const rect = annotationCanvas.getBoundingClientRect();
-                const clientX = e.clientX - rect.left;
-                const clientY = e.clientY - rect.top;
-                showTextInput(startX, startY, clientX, clientY);
-                isDrawing = false;
-            } else {
-                // Start drawing shape
-                tempAnnotation = {
-                    type: currentTool,
-                    x: startX,
-                    y: startY,
-                    endX: startX,
-                    endY: startY,
-                    color: colorPicker.value,
-                    lineWidth: parseInt(sizeSlider.value),
-                    pageNumber: currentPageNum
-                };
-            }
-        }
-        
-        // Track if mouse has moved significantly (for distinguishing click vs drag)
-        let hasMovedSignificantly = false;
-        
-        function handleMouseMove(e) {
-            if (!isDrawing) return;
-            
-            const coords = getCanvasCoordinates(e);
-            
-            // Check if mouse has moved significantly (more than 5 pixels)
-            if (!hasMovedSignificantly) {
-                const dx = Math.abs(coords.x - startX);
-                const dy = Math.abs(coords.y - startY);
-                if (dx > 5 || dy > 5) {
-                    hasMovedSignificantly = true;
-                }
-            }
-            
-            if (currentTool === 'select' && selectedAnnotation) {
-                // Move annotation
-                const dx = coords.x - startX;
-                const dy = coords.y - startY;
-                
-                selectedAnnotation.x += dx;
-                selectedAnnotation.y += dy;
-                if (selectedAnnotation.endX !== undefined) {
-                    selectedAnnotation.endX += dx;
-                    selectedAnnotation.endY += dy;
-                }
-                
-                startX = coords.x;
-                startY = coords.y;
-                renderAnnotations();
-            } else if (tempAnnotation) {
-                // Update temporary annotation while drawing
-                tempAnnotation.endX = coords.x;
-                tempAnnotation.endY = coords.y;
-                renderAnnotations();
-                renderTempAnnotation();
-            }
-        }
-        
-        function handleMouseUp(e) {
-            if (!isDrawing) return;
-            
-            // For select tool with text annotation: if it was just a click (not a drag), open editor
-            if (currentTool === 'select' && selectedAnnotation && selectedAnnotation.type === 'text') {
-                if (!hasMovedSignificantly) {
-                    // It was a click, not a drag - open the editor
-                    showInlineEditorForText(selectedAnnotation);
-                }
-                hasMovedSignificantly = false;
-            }
-            
-            if (tempAnnotation && currentTool !== 'select' && currentTool !== 'text') {
-                // Validate annotation size
-                const dx = Math.abs(tempAnnotation.endX - tempAnnotation.x);
-                const dy = Math.abs(tempAnnotation.endY - tempAnnotation.y);
-                
-                if (dx > 5 || dy > 5) {
-                    // Add annotation to list
-                    annotations.push({ ...tempAnnotation, id: Date.now() });
-                    showNotification('Annotation added');
-                }
-                
-                tempAnnotation = null;
-                renderAnnotations();
-            }
-            
-            isDrawing = false;
-            hasMovedSignificantly = false;
-        }
-        
-        // Touch event handlers
-        function handleTouchStart(e) {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousedown', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            handleMouseDown(mouseEvent);
-        }
-        
-        function handleTouchMove(e) {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            handleMouseMove(mouseEvent);
-        }
-        
-        function handleTouchEnd(e) {
-            e.preventDefault();
-            const mouseEvent = new MouseEvent('mouseup', {});
-            handleMouseUp(mouseEvent);
-        }
-        
-        function showTextInput(canvasX, canvasY, clientX, clientY) {
-            // Remove existing inline editor if any
-            removeInlineEditor();
-            
-            // Track when the editor was created to prevent immediate blur removal
-            const editorCreationTime = Date.now();
-            
-            // Create inline text editor with ALL styles inline to avoid CSS issues
-            inlineEditor = document.createElement('div');
-            inlineEditor.contentEditable = true;
-            // Set all necessary styles inline
-            inlineEditor.style.position = 'absolute';
-            inlineEditor.style.left = `${clientX}px`;
-            inlineEditor.style.top = `${clientY}px`;
-            inlineEditor.style.fontSize = `${parseInt(sizeSlider.value) * 4 + 12}px`;
-            inlineEditor.style.color = colorPicker.value;
-            inlineEditor.style.background = 'transparent';
-            inlineEditor.style.border = '2px dashed #667eea';
-            inlineEditor.style.borderRadius = '4px';
-            inlineEditor.style.padding = '4px';
-            inlineEditor.style.fontFamily = 'Inter, sans-serif';
-            inlineEditor.style.minWidth = '100px';
-            inlineEditor.style.minHeight = '24px';
-            inlineEditor.style.zIndex = '1000';
-            inlineEditor.style.outline = 'none';
-            inlineEditor.style.overflow = 'visible';
-            inlineEditor.style.whiteSpace = 'pre-wrap';
-            inlineEditor.style.wordWrap = 'break-word';
-            // Use a zero-width space to give the editor content while appearing empty
-            inlineEditor.textContent = '\u200B';
-            
-            pdfViewerContainer.appendChild(inlineEditor);
-            
-            // Focus the editor immediately
-            inlineEditor.focus();
-            
-            // Add event listeners to handle text input (with delay to prevent immediate blur)
-            setTimeout(() => {
-                if (!inlineEditor) return; // Editor was already removed
-                
-                const finishEditing = () => {
-                    const timeSinceCreation = Date.now() - editorCreationTime;
-                    
-                    // Don't remove if blur happened too quickly (likely just initial focus loss)
-                    if (timeSinceCreation < 200) {
-                        return;
-                    }
-                    
-                    const text = inlineEditor?.textContent.trim() || '';
-                    if (text && text !== '\u200B') {  // Don't save if just zero-width space
-                        annotations.push({
-                            id: Date.now(),
-                            type: 'text',
-                            x: canvasX,
-                            y: canvasY,
-                            text: text,
-                            color: colorPicker.value,
-                            fontSize: parseInt(sizeSlider.value) * 4 + 12,
-                            pageNumber: currentPageNum
-                        });
-                        renderAnnotations();
-                        showNotification('Text annotation added');
-                    }
-                    removeInlineEditor();
-                };
-                
-                inlineEditor.addEventListener('blur', finishEditing);
-                
-                inlineEditor.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        finishEditing();
-                    } else if (e.key === 'Escape') {
-                        removeInlineEditor();
-                    }
-                });
-            }, 100);
-            
-            inlineEditor.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    finishEditing();
-                } else if (e.key === 'Escape') {
-                    removeInlineEditor();
+                    if (darkIcon) darkIcon.classList.remove('hidden');
+                    if (lightIcon) lightIcon.classList.add('hidden');
+                    localStorage.setItem('theme', 'light');
                 }
             });
-        }
-        
-        function removeInlineEditor() {
-            if (inlineEditor) {
-                inlineEditor.remove();
-                inlineEditor = null;
-            }
-            if (textSizeControls) {
-                textSizeControls.remove();
-                textSizeControls = null;
-            }
-        }
-        
-        function showInlineEditorForText(annotation) {
-            // Remove existing inline editor if any
-            removeInlineEditor();
-            
-            // Temporarily hide this annotation while editing
-            const originalText = annotation.text;
-            annotation.text = ''; // Hide text from canvas
-            renderAnnotations();
-            
-            // Convert canvas coordinates to client coordinates for positioning
-            const rect = annotationCanvas.getBoundingClientRect();
-            const scaleX = rect.width / annotationCanvas.width;
-            const scaleY = rect.height / annotationCanvas.height;
-            const clientX = annotation.x * scaleX;
-            const clientY = annotation.y * scaleY;
-            
-            // Track when the editor was created to prevent immediate blur removal
-            const editorCreationTime = Date.now();
-            
-            // Create inline text editor for existing annotation with ALL styles inline
-            inlineEditor = document.createElement('div');
-            inlineEditor.contentEditable = true;
-            // Set all necessary styles inline
-            inlineEditor.style.position = 'absolute';
-            inlineEditor.style.left = `${clientX}px`;
-            inlineEditor.style.top = `${clientY}px`;
-            inlineEditor.style.fontSize = `${annotation.fontSize}px`;
-            inlineEditor.style.color = annotation.color;
-            inlineEditor.style.background = 'transparent';
-            inlineEditor.style.border = '2px dashed #667eea';
-            inlineEditor.style.borderRadius = '4px';
-            inlineEditor.style.padding = '4px';
-            inlineEditor.style.fontFamily = 'Inter, sans-serif';
-            inlineEditor.style.minWidth = '100px';
-            inlineEditor.style.minHeight = '24px';
-            inlineEditor.style.zIndex = '1000';
-            inlineEditor.style.outline = 'none';
-            inlineEditor.style.overflow = 'visible';
-            inlineEditor.style.whiteSpace = 'pre-wrap';
-            inlineEditor.style.wordWrap = 'break-word';
-            inlineEditor.textContent = originalText; // Use original text since annotation.text was cleared
-            
-            pdfViewerContainer.appendChild(inlineEditor);
-            
-            // Focus the editor immediately
-            inlineEditor.focus();
-            
-            // Select all text
-            const range = document.createRange();
-            range.selectNodeContents(inlineEditor);
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-            
-            // Show text size controls
-            showTextSizeControls(annotation, inlineEditor);
-            
-            // Add event listeners with delay to prevent immediate blur removal
-            setTimeout(() => {
-                if (!inlineEditor) return; // Editor was already removed
-                
-                const finishEditing = () => {
-                    const timeSinceCreation = Date.now() - editorCreationTime;
-                    
-                    // Don't remove if blur happened too quickly (likely just initial focus loss)
-                    if (timeSinceCreation < 200) {
-                        return;
-                    }
-                    
-                    // Update the annotation with the edited text
-                    annotation.text = inlineEditor.textContent.trim();
-                    renderAnnotations();
-                    removeInlineEditor();
-                };
-                
-                const cancelEditing = () => {
-                    // Restore original text without saving changes
-                    annotation.text = originalText;
-                    renderAnnotations();
-                    removeInlineEditor();
-                };
-                
-                inlineEditor.addEventListener('blur', (e) => {
-                    // Don't remove editor if focus moved to the controls
-                    if (textSizeControls && e.relatedTarget === textSizeControls) {
-                        return;
-                    }
-                    // Don't remove if focus moved to a child of the controls
-                    if (textSizeControls && textSizeControls.contains(e.relatedTarget)) {
-                        return;
-                    }
-                    finishEditing();
-                });
-                
-                inlineEditor.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        finishEditing();
-                    } else if (e.key === 'Escape') {
-                        e.preventDefault();
-                        cancelEditing();
-                    }
-                });
-            }, 100);
-        }
-        
-        function showTextSizeControls(annotation, editorElement) {
-            // Remove existing controls if any
-            if (textSizeControls) {
-                textSizeControls.remove();
-            }
-            
-            textSizeControls = document.createElement('div');
-            // Set all styles inline instead of using CSS class
-            textSizeControls.style.position = 'absolute';
-            textSizeControls.style.background = 'white';
-            textSizeControls.style.border = '1px solid #e5e7eb';
-            textSizeControls.style.borderRadius = '8px';
-            textSizeControls.style.padding = '8px 12px';
-            textSizeControls.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-            textSizeControls.style.zIndex = '1001';
-            textSizeControls.style.display = 'flex';
-            textSizeControls.style.alignItems = 'center';
-            textSizeControls.style.gap = '8px';
-            
-            // Position controls - below the editor if there's space, otherwise above
-            const editorRect = editorElement.getBoundingClientRect();
-            const containerRect = pdfViewerContainer.getBoundingClientRect();
-            const controlsHeight = 50; // Approximate height of controls
-            
-            textSizeControls.style.left = `${editorRect.left - containerRect.left}px`;
-            
-            // Check if there's enough space below the editor
-            if (editorRect.bottom + controlsHeight <= containerRect.bottom) {
-                // Position below
-                textSizeControls.style.top = `${editorRect.bottom - containerRect.top + 8}px`;
-            } else {
-                // Position above
-                textSizeControls.style.top = `${editorRect.top - containerRect.top - controlsHeight - 8}px`;
-            }
-            
-            textSizeControls.innerHTML = `
-                <label style="font-size: 12px; color: #6b7280; font-weight: 500;">Font Size:</label>
-                <input type="range" min="8" max="72" value="${annotation.fontSize}" style="width: 100px;">
-                <span style="font-size: 12px; color: #374151; min-width: 30px;">${annotation.fontSize}px</span>
-                <label style="font-size: 12px; color: #6b7280; font-weight: 500; margin-left: 8px;">Color:</label>
-                <input type="color" value="${annotation.color}" style="width: 30px; height: 30px; border: none; cursor: pointer;">
-            `;
-            
-            pdfViewerContainer.appendChild(textSizeControls);
-            
-            const slider = textSizeControls.querySelector('input[type="range"]');
-            const sizeSpan = textSizeControls.querySelector('span');
-            const colorPicker = textSizeControls.querySelector('input[type="color"]');
-            
-            slider.addEventListener('input', (e) => {
-                const newSize = parseInt(e.target.value);
-                annotation.fontSize = newSize;
-                editorElement.style.fontSize = `${newSize}px`;
-                sizeSpan.textContent = `${newSize}px`;
-            });
-            
-            colorPicker.addEventListener('input', (e) => {
-                const newColor = e.target.value;
-                annotation.color = newColor;
-                editorElement.style.color = newColor;
-            });
-            
-            slider.addEventListener('change', () => {
-                renderAnnotations();
-            });
-            
-            colorPicker.addEventListener('change', () => {
-                renderAnnotations();
-            });
-        }
-        
-        function findAnnotationAt(x, y) {
-            // Search in reverse order (topmost first)
-            for (let i = annotations.length - 1; i >= 0; i--) {
-                const ann = annotations[i];
-                if (ann.pageNumber !== currentPageNum) continue;
-                
-                if (ann.type === 'text') {
-                    // Check if near text position
-                    if (Math.abs(x - ann.x) < 50 && Math.abs(y - ann.y) < 20) {
-                        return ann;
-                    }
-                } else {
-                    // Check if within shape bounds
-                    const minX = Math.min(ann.x, ann.endX);
-                    const maxX = Math.max(ann.x, ann.endX);
-                    const minY = Math.min(ann.y, ann.endY);
-                    const maxY = Math.max(ann.y, ann.endY);
-                    
-                    if (x >= minX - 10 && x <= maxX + 10 && y >= minY - 10 && y <= maxY + 10) {
-                        return ann;
-                    }
-                }
-            }
-            return null;
-        }
-        
-        function renderAnnotations() {
-            // Clear annotation canvas
-            annotationCtx.clearRect(0, 0, annotationCanvas.width, annotationCanvas.height);
-            
-            // Render all annotations for current page
-            annotations
-                .filter(ann => ann.pageNumber === currentPageNum)
-                .forEach(ann => {
-                    drawAnnotation(ann, ann === selectedAnnotation);
-                });
-        }
-        
-        function renderTempAnnotation() {
-            if (tempAnnotation) {
-                drawAnnotation(tempAnnotation, false);
-            }
-        }
-        
-        function drawAnnotation(ann, isSelected = false) {
-            annotationCtx.save();
-            annotationCtx.strokeStyle = ann.color;
-            annotationCtx.fillStyle = ann.color;
-            annotationCtx.lineWidth = ann.lineWidth || 3;
-            annotationCtx.lineCap = 'round';
-            annotationCtx.lineJoin = 'round';
-            
-            if (isSelected) {
-                annotationCtx.shadowColor = '#667eea';
-                annotationCtx.shadowBlur = 10;
-            }
-            
-            switch (ann.type) {
-                case 'text':
-                    annotationCtx.font = `${ann.fontSize || 16}px Inter, sans-serif`;
-                    annotationCtx.fillText(ann.text, ann.x, ann.y);
-                    break;
-                    
-                case 'highlight':
-                    annotationCtx.globalAlpha = 0.3;
-                    const width = ann.endX - ann.x;
-                    const height = ann.endY - ann.y;
-                    annotationCtx.fillRect(ann.x, ann.y, width, height);
-                    break;
-                    
-                case 'arrow':
-                    drawArrow(annotationCtx, ann.x, ann.y, ann.endX, ann.endY, ann.lineWidth);
-                    break;
-                    
-                case 'rect':
-                    annotationCtx.strokeRect(ann.x, ann.y, ann.endX - ann.x, ann.endY - ann.y);
-                    break;
-                    
-                case 'circle':
-                    const radiusX = Math.abs(ann.endX - ann.x) / 2;
-                    const radiusY = Math.abs(ann.endY - ann.y) / 2;
-                    const centerX = ann.x + (ann.endX - ann.x) / 2;
-                    const centerY = ann.y + (ann.endY - ann.y) / 2;
-                    annotationCtx.beginPath();
-                    annotationCtx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
-                    annotationCtx.stroke();
-                    break;
-                    
-                case 'line':
-                    annotationCtx.beginPath();
-                    annotationCtx.moveTo(ann.x, ann.y);
-                    annotationCtx.lineTo(ann.endX, ann.endY);
-                    annotationCtx.stroke();
-                    break;
-            }
-            
-            annotationCtx.restore();
-        }
-        
-        function drawArrow(ctx, fromX, fromY, toX, toY, lineWidth) {
-            const headLength = 15;
-            const angle = Math.atan2(toY - fromY, toX - fromX);
-            
-            // Draw line
-            ctx.beginPath();
-            ctx.moveTo(fromX, fromY);
-            ctx.lineTo(toX, toY);
-            ctx.stroke();
-            
-            // Draw arrowhead
-            ctx.beginPath();
-            ctx.moveTo(toX, toY);
-            ctx.lineTo(toX - headLength * Math.cos(angle - Math.PI / 6), toY - headLength * Math.sin(angle - Math.PI / 6));
-            ctx.moveTo(toX, toY);
-            ctx.lineTo(toX - headLength * Math.cos(angle + Math.PI / 6), toY - headLength * Math.sin(angle + Math.PI / 6));
-            ctx.stroke();
-        }
-        
-        // Delete selected annotation
-        deleteToolBtn.addEventListener('click', () => {
-            if (selectedAnnotation) {
-                annotations = annotations.filter(ann => ann.id !== selectedAnnotation.id);
-                selectedAnnotation = null;
-                removeInlineEditor();
-                renderAnnotations();
-                showNotification('Annotation deleted');
-            } else {
-                showNotification('Select an annotation to delete', 'info');
-            }
         });
-        
-        // Clear all annotations
-        clearToolBtn.addEventListener('click', () => {
-            if (annotations.length === 0) {
-                showNotification('No annotations to clear', 'info');
-                return;
-            }
-            
-            if (confirm('Are you sure you want to clear all annotations?')) {
-                annotations = [];
-                selectedAnnotation = null;
-                removeInlineEditor();
-                renderAnnotations();
-                showNotification('All annotations cleared');
-            }
-        });
-        
-        // Download annotated PDF
-        annotateDownloadBtn.addEventListener('click', async () => {
-            console.log('[DEBUG] Download button clicked');
-            console.log('[DEBUG] annotatePdfDoc:', annotatePdfDoc);
-            console.log('[DEBUG] annotateUploadedFile:', annotateUploadedFile);
-            console.log('[DEBUG] PDFLib available:', typeof PDFLib !== 'undefined');
-            console.log('[DEBUG] totalPages:', totalPages);
-            console.log('[DEBUG] annotations count:', annotations.length);
-            
-            if (!annotatePdfDoc || !annotateUploadedFile) {
-                console.error('[DEBUG] Missing required data: annotatePdfDoc or annotateUploadedFile');
-                showNotification('Please upload a PDF first', 'error');
-                return;
-            }
-            
-            annotateDownloadBtn.disabled = true;
-            annotateLoader.classList.remove('hidden');
-            
-            try {
-                console.log('[DEBUG] Starting PDF generation...');
-                // Load the original PDF with PDF-lib
-                console.log('[DEBUG] Reading file as ArrayBuffer...');
-                const arrayBuffer = await annotateUploadedFile.arrayBuffer();
-                console.log('[DEBUG] ArrayBuffer size:', arrayBuffer.byteLength);
-                
-                console.log('[DEBUG] Loading PDF with PDF-lib...');
-                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-                console.log('[DEBUG] PDF loaded successfully, page count:', pdfDoc.getPageCount());
-                const pages = pdfDoc.getPages();
-                
-                console.log('[DEBUG] Total pages to process:', totalPages);
-                console.log('[DEBUG] Processing annotations...');
-                
-                // Process annotations for each page
-                for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-                    const pageAnnotations = annotations.filter(ann => ann.pageNumber === pageNum);
-                    console.log(`[DEBUG] Page ${pageNum}: ${pageAnnotations.length} annotations`);
-                    if (pageAnnotations.length === 0) continue;
-                    
-                    const page = pages[pageNum - 1];
-                    const { width, height } = page.getSize();
-                    console.log(`[DEBUG] Page ${pageNum} size: ${width}x${height}`);
-                    
-                    // Calculate scale factors
-                    console.log(`[DEBUG] Getting viewport for page ${pageNum}...`);
-                    const viewport = await annotatePdfDoc.getPage(pageNum).then(p => p.getViewport({ scale: pdfScale }));
-                    const scaleX = width / viewport.width;
-                    const scaleY = height / viewport.height;
-                    console.log(`[DEBUG] Scale factors - scaleX: ${scaleX}, scaleY: ${scaleY}, pdfScale: ${pdfScale}`);
-                    
-                    for (const ann of pageAnnotations) {
-                        console.log(`[DEBUG] Processing annotation: type=${ann.type}, x=${ann.x}, y=${ann.y}, color=${ann.color}`);
-                        // Convert canvas coordinates to PDF coordinates
-                        const x = ann.x * scaleX;
-                        const y = height - (ann.y * scaleY); // Flip Y coordinate
-                        const pdfLineWidth = (ann.lineWidth || 3) * scaleX;
-                        
-                        // Convert color to RGB
-                        console.log('[DEBUG] Converting color to RGB...');
-                        const rgbColor = hexToRgb(ann.color);
-                        console.log('[DEBUG] RGB color:', rgbColor);
-                        
-                        switch (ann.type) {
-                            case 'text':
-                                const fontSize = (ann.fontSize || 16) * scaleX;
-                                const sanitizedText = sanitizeTextForPdf(ann.text);
-                                console.log(`[DEBUG] Text annotation - original: "${ann.text}", sanitized: "${sanitizedText}"`);
-                                page.drawText(sanitizedText, {
-                                    x: x,
-                                    y: y - fontSize, // Adjust for text baseline
-                                    size: fontSize,
-                                    font: await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica),
-                                    color: PDFLib.rgb(rgbColor.r, rgbColor.g, rgbColor.b)
-                                });
-                                break;
-                                
-                            case 'highlight':
-                                const highlightWidth = (ann.endX - ann.x) * scaleX;
-                                const highlightHeight = (ann.endY - ann.y) * scaleY;
-                                page.drawRectangle({
-                                    x: x,
-                                    y: height - (ann.endY * scaleY),
-                                    width: highlightWidth,
-                                    height: highlightHeight,
-                                    color: PDFLib.rgb(rgbColor.r, rgbColor.g, rgbColor.b),
-                                    opacity: 0.3
-                                });
-                                break;
-                                
-                            case 'arrow':
-                                const arrowEndX = ann.endX * scaleX;
-                                const arrowEndY = height - (ann.endY * scaleY);
-                                page.drawLine({
-                                    start: { x, y },
-                                    end: { x: arrowEndX, y: arrowEndY },
-                                    thickness: pdfLineWidth,
-                                    color: PDFLib.rgb(rgbColor.r, rgbColor.g, rgbColor.b)
-                                });
-                                // Draw arrowhead
-                                drawArrowOnPdf(page, x, y, arrowEndX, arrowEndY, pdfLineWidth, rgbColor);
-                                break;
-                                
-                            case 'rect':
-                                const rectWidth = (ann.endX - ann.x) * scaleX;
-                                const rectHeight = (ann.endY - ann.y) * scaleY;
-                                page.drawRectangle({
-                                    x: x,
-                                    y: height - (ann.endY * scaleY),
-                                    width: rectWidth,
-                                    height: rectHeight,
-                                    borderColor: PDFLib.rgb(rgbColor.r, rgbColor.g, rgbColor.b),
-                                    borderWidth: pdfLineWidth
-                                });
-                                break;
-                                
-                            case 'circle':
-                                const circleRadiusX = Math.abs(ann.endX - ann.x) * scaleX / 2;
-                                const circleRadiusY = Math.abs(ann.endY - ann.y) * scaleY / 2;
-                                const circleCenterX = x + circleRadiusX;
-                                const circleCenterY = height - (ann.y * scaleY) - circleRadiusY;
-                                page.drawEllipse({
-                                    x: circleCenterX,
-                                    y: circleCenterY,
-                                    xScale: circleRadiusX,
-                                    yScale: circleRadiusY,
-                                    borderColor: PDFLib.rgb(rgbColor.r, rgbColor.g, rgbColor.b),
-                                    borderWidth: pdfLineWidth
-                                });
-                                break;
-                                
-                            case 'line':
-                                const lineEndX = ann.endX * scaleX;
-                                const lineEndY = height - (ann.endY * scaleY);
-                                page.drawLine({
-                                    start: { x, y },
-                                    end: { x: lineEndX, y: lineEndY },
-                                    thickness: pdfLineWidth,
-                                    color: PDFLib.rgb(rgbColor.r, rgbColor.g, rgbColor.b)
-                                });
-                                break;
-                        }
-                    }
-                }
-                
-                // Save and download
-                console.log('[DEBUG] Saving PDF...');
-                const pdfBytes = await pdfDoc.save();
-                console.log('[DEBUG] PDF saved, size:', pdfBytes.length);
-                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `${annotateUploadedFile.name.replace('.pdf', '')}_annotated.pdf`;
-                a.click();
-                
-                URL.revokeObjectURL(url);
-                showNotification('Annotated PDF downloaded successfully!');
-                
-            } catch (error) {
-                console.error('[DEBUG] Error generating annotated PDF:', error);
-                console.error('[DEBUG] Error stack:', error.stack);
-                showNotification('Failed to generate annotated PDF: ' + error.message, 'error');
-            } finally {
-                annotateDownloadBtn.disabled = false;
-                annotateLoader.classList.add('hidden');
-            }
-        });
-        
-        function drawArrowOnPdf(page, fromX, fromY, toX, toY, thickness, color) {
-            const headLength = 10;
-            const angle = Math.atan2(toY - fromY, toX - fromX);
-            
-            // Draw arrowhead lines
-            page.drawLine({
-                start: { x: toX, y: toY },
-                end: {
-                    x: toX - headLength * Math.cos(angle - Math.PI / 6),
-                    y: toY - headLength * Math.sin(angle - Math.PI / 6)
-                },
-                thickness: thickness,
-                color: PDFLib.rgb(color.r, color.g, color.b)
-            });
-            
-            page.drawLine({
-                start: { x: toX, y: toY },
-                end: {
-                    x: toX - headLength * Math.cos(angle + Math.PI / 6),
-                    y: toY - headLength * Math.sin(angle + Math.PI / 6)
-                },
-                thickness: thickness,
-                color: PDFLib.rgb(color.r, color.g, color.b)
-            });
-        }
-        
-        function hexToRgb(hex) {
-            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16) / 255,
-                g: parseInt(result[2], 16) / 255,
-                b: parseInt(result[3], 16) / 255
-            } : { r: 0, g: 0, b: 0 };
-        }
-        
-        // Sanitize text to remove characters that can't be encoded by WinAnsi
-        function sanitizeTextForPdf(text) {
-            if (!text) return '';
-            // Remove zero-width spaces and other non-WinAnsi characters
-            // WinAnsi encoding supports Latin-1 supplement (U+0000 to U+00FF)
-            return text.replace(/[\u200B-\u200D\uFEFF]/g, '') // Zero-width characters
-                      .replace(/[\u0100-\uFFFF]/g, '?'); // Replace other non-Latin-1 with ?
-        }
-        
-        function resetAnnotateState() {
-            annotatePdfDoc = null;
-            annotateUploadedFile = null;
-            currentPageNum = 1;
-            totalPages = 0;
-            annotations = [];
-            selectedAnnotation = null;
-            tempAnnotation = null;
-            
-            // Clear canvases
-            pdfCtx.clearRect(0, 0, pdfCanvas.width, pdfCanvas.height);
-            annotationCtx.clearRect(0, 0, annotationCanvas.width, annotationCanvas.height);
-            
-            // Reset UI
-            annotateDropZone.classList.remove('hidden');
-            annotateViewerSection.classList.add('hidden');
-            annotateFileInput.value = '';
-            
-            // Remove any text input overlays and inline editors
-            const overlays = document.querySelectorAll('.text-input-overlay');
-            overlays.forEach(overlay => overlay.remove());
-            removeInlineEditor();
-        }
-        
-        // Initialize annotation tool
-        updateCursor();
     </script>
+
+    <!-- Load Bundled JavaScript (works with file:// protocol) -->
+    <script src="./js/bundle.js"></script>
 </body>
 </html>
