@@ -8,57 +8,40 @@ import { initPdfJsWorker } from './utils/pdfUtils.js';
 import { initMerge } from './modules/merge.js';
 import { initSplit } from './modules/split.js';
 import { initExcel } from './modules/excel.js';
+import { initCompress } from './modules/compress.js';
 import { initAnnotate } from './modules/annotate.js';
+
+/**
+ * Tab button / content panel pairs.
+ * Adding a feature tab means adding one entry here.
+ */
+const TAB_DEFINITIONS = [
+    { tabId: 'merge-tab',    contentId: 'merge-content' },
+    { tabId: 'split-tab',    contentId: 'split-content' },
+    { tabId: 'ppt-tab',      contentId: 'ppt-content' },
+    { tabId: 'compress-tab', contentId: 'compress-content' },
+    { tabId: 'annotate-tab', contentId: 'annotate-content' }
+];
 
 /**
  * Setup tab switching for all tabs
  */
 function setupTabSwitching() {
-    // Get all tab elements
-    const mergeTab = document.getElementById('merge-tab');
-    const splitTab = document.getElementById('split-tab');
-    const pptTab = document.getElementById('ppt-tab');
-    const annotateTab = document.getElementById('annotate-tab');
-    const mergeContent = document.getElementById('merge-content');
-    const splitContent = document.getElementById('split-content');
-    const pptContent = document.getElementById('ppt-content');
-    const annotateContent = document.getElementById('annotate-content');
+    const tabs = TAB_DEFINITIONS.map(def => ({
+        tab: document.getElementById(def.tabId),
+        content: document.getElementById(def.contentId)
+    }));
 
-    // Setup merge tab
-    if (mergeTab) {
-        mergeTab.addEventListener('click', () => {
-            const allTabs = [splitTab, pptTab, annotateTab].filter(Boolean);
-            const allContents = [splitContent, pptContent, annotateContent].filter(Boolean);
-            setActiveTab(mergeTab, allTabs, mergeContent, allContents);
-        });
-    }
+    tabs.forEach(current => {
+        if (!current.tab || !current.content) return;
 
-    // Setup split tab
-    if (splitTab) {
-        splitTab.addEventListener('click', () => {
-            const allTabs = [mergeTab, pptTab, annotateTab].filter(Boolean);
-            const allContents = [mergeContent, pptContent, annotateContent].filter(Boolean);
-            setActiveTab(splitTab, allTabs, splitContent, allContents);
+        current.tab.addEventListener('click', () => {
+            const others = tabs.filter(other => other !== current);
+            const otherTabs = others.map(other => other.tab).filter(Boolean);
+            const otherContents = others.map(other => other.content).filter(Boolean);
+            setActiveTab(current.tab, otherTabs, current.content, otherContents);
         });
-    }
-
-    // Setup ppt tab
-    if (pptTab) {
-        pptTab.addEventListener('click', () => {
-            const allTabs = [mergeTab, splitTab, annotateTab].filter(Boolean);
-            const allContents = [mergeContent, splitContent, annotateContent].filter(Boolean);
-            setActiveTab(pptTab, allTabs, pptContent, allContents);
-        });
-    }
-
-    // Setup annotate tab
-    if (annotateTab) {
-        annotateTab.addEventListener('click', () => {
-            const allTabs = [mergeTab, splitTab, pptTab].filter(Boolean);
-            const allContents = [mergeContent, splitContent, pptContent].filter(Boolean);
-            setActiveTab(annotateTab, allTabs, annotateContent, allContents);
-        });
-    }
+    });
 }
 
 /**
@@ -128,6 +111,13 @@ function initApp() {
         console.error('[ERROR] Failed to initialize Excel module:', error);
     }
     
+    try {
+        initCompress();
+        console.log('[DEBUG] Compress module initialized');
+    } catch (error) {
+        console.error('[ERROR] Failed to initialize compress module:', error);
+    }
+
     try {
         initAnnotate();
         console.log('[DEBUG] Annotate module initialized');
