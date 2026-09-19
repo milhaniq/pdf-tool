@@ -597,6 +597,38 @@
             border-left-color: #f59e0b;
         }
 
+        /* Light Tailwind surfaces that have no dark variant. Text classes like
+           .text-gray-800 DO flip to a light colour in dark mode, so any surface
+           left light here renders light text on a light background. */
+        html.dark .option-card,
+        html.dark .compress-preset {
+            background-image: none;
+            background-color: #1e293b;
+        }
+
+        html.dark .option-card:hover,
+        html.dark .compress-preset:hover {
+            background-image: none;
+            background-color: #334155;
+        }
+
+        html.dark .bg-gray-50 {
+            background-color: #1e293b;
+        }
+
+        html.dark .hover\:bg-gray-50:hover,
+        html.dark .hover\:bg-gray-100:hover {
+            background-color: #334155;
+        }
+
+        /* Annotation toolbar boxes sit inside a .bg-gray-50 container.
+           Scoped deliberately: #pdf-viewer-container is also .bg-white and must
+           stay white, since it is the backdrop behind the rendered PDF page. */
+        html.dark .bg-gray-50 .bg-white {
+            background-color: #0f172a;
+            border-color: #334155;
+        }
+
         html.dark .compress-table th,
         html.dark .compress-table td {
             border-bottom-color: #334155;
@@ -906,7 +938,7 @@
                     <div id="conversion-mode-selection" class="hidden">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Select conversion type</h3>
                         <div class="space-y-3">
-                            <label class="flex items-center p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg cursor-pointer hover:from-purple-100 hover:to-pink-100 transition border-2 border-transparent has-[:checked]:border-purple-500">
+                            <label class="option-card flex items-center p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg cursor-pointer hover:from-purple-100 hover:to-pink-100 transition border-2 border-transparent has-[:checked]:border-purple-500">
                                 <input type="radio" name="conversion-mode" id="convert-ppt-mode" value="ppt" checked class="mr-3">
                                 <div class="flex-1">
                                     <div class="font-semibold text-gray-800">Convert to PowerPoint (PPTX)</div>
@@ -914,7 +946,7 @@
                                 </div>
                                 <i data-lucide="presentation" class="w-6 h-6 text-purple-500"></i>
                             </label>
-                            <label class="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg cursor-pointer hover:from-green-100 hover:to-emerald-100 transition border-2 border-transparent has-[:checked]:border-green-500">
+                            <label class="option-card flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg cursor-pointer hover:from-green-100 hover:to-emerald-100 transition border-2 border-transparent has-[:checked]:border-green-500">
                                 <input type="radio" name="conversion-mode" id="convert-excel-mode" value="excel" class="mr-3">
                                 <div class="flex-1">
                                     <div class="font-semibold text-gray-800">Convert to Excel (.xlsx)</div>
