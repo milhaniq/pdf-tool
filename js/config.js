@@ -52,6 +52,28 @@ export const CONFIG = {
         kilo: 1024
     },
 
+    // Compression settings
+    compress: {
+        // Presets shown as selectable cards
+        presets: [
+            { id: 'min',    name: 'Smallest file', desc: '72 DPI · greyscale · maximum squeeze', dpi: 72,  quality: 32, color: 'gray' },
+            { id: 'strong', name: 'Strong',        desc: '96 DPI · good for email attachments',  dpi: 96,  quality: 50, color: 'colour' },
+            { id: 'bal',    name: 'Balanced',      desc: '144 DPI · readable on screen',         dpi: 144, quality: 68, color: 'colour' },
+            { id: 'light',  name: 'Light',         desc: '200 DPI · near print quality',         dpi: 200, quality: 82, color: 'colour' },
+            { id: 'scan',   name: 'Scanned text',  desc: '150 DPI · black & white, tiny',        dpi: 150, quality: 60, color: 'bw' }
+        ],
+
+        defaultPreset: 'strong', // Preset selected on load
+        minDpi: 40,
+        maxDpi: 300,
+        dpiStep: 2,
+        minQuality: 10,
+        maxQuality: 95,
+        maxScale: 4,             // Upper bound on the render scale factor
+        bwThreshold: 170,        // Luminance cut-off for black & white mode
+        safeMode: true           // Keep the original when compression does not help
+    },
+
     // Excel conversion settings
     excel: {
         // Table detection thresholds

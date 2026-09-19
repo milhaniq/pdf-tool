@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub](https://img.shields.io/github/license/yourusername/pdf-tools-suite)](https://github.com/yourusername/pdf-tools-suite)
 
-A powerful, browser-based toolkit to **merge, split, convert PDF files to PowerPoint (PPTX) or Excel (.xlsx), and annotate PDFs** — all client-side, with no server uploads required.
+A powerful, browser-based toolkit to **merge, split, compress, convert PDF files to PowerPoint (PPTX) or Excel (.xlsx), and annotate PDFs** — all client-side, with no server uploads required.
 Built using **HTML, TailwindCSS, JavaScript, PDF-Lib, PDF.js, JSZip, SortableJS, PptxGenJS, and SheetJS**.
 
 ---
@@ -51,6 +51,21 @@ Built using **HTML, TailwindCSS, JavaScript, PDF-Lib, PDF.js, JSZip, SortableJS,
 
 **⚠️ Accuracy Notice:** Works best with simple, native PDFs containing clear tabular data. Complex layouts, scanned documents, or merged cells may have reduced accuracy. Since this is 100% client-side (for your privacy), we continuously improve our algorithms but perfect conversion isn't always possible.
 
+### 🗜️ **Compress PDF**
+
+* Drag & drop one or many PDFs and compress the whole batch at once
+* Pick a preset — Smallest file, Strong, Balanced, Light, or Scanned text
+* Or fine-tune it yourself:
+
+  * **Resolution (DPI)** — 40 to 300
+  * **Image quality** — JPEG quality 10% to 95%
+  * **Colour mode** — keep colour, greyscale, or black & white
+* **Safe mode** keeps the original file whenever compression would not make it smaller
+* Per-file results table showing original size, compressed size, and percentage saved
+* Download files individually or grab them all as a ZIP
+
+**⚠️ Rasterisation Notice:** Compression re-renders each page as an image, so text in the output is no longer selectable or searchable. Use 150–200 DPI if the file must stay readable when printed; 72–96 DPI is fine for email and screen viewing.
+
 ### ✏️ **PDF Annotation**
 
 * Upload any PDF document (forms, reports, etc.)
@@ -84,8 +99,8 @@ No files are uploaded, stored, or sent to any server.
 | **TailwindCSS** | UI styling                                           |
 | **PDF-Lib**     | Merging, splitting PDFs & burning annotations        |
 | **SortableJS**  | Drag-and-drop file ordering                          |
-| **JSZip**       | Creating ZIP archives for split files                |
-| **PDF.js**      | Rendering PDF pages for PPT conversion & annotation  |
+| **JSZip**       | Creating ZIP archives for split & compressed files   |
+| **PDF.js**      | Rendering PDF pages for conversion, compression & annotation |
 | **PptxGenJS**   | Generating PowerPoint presentations                  |
 | **SheetJS**     | Generating Excel spreadsheets                        |
 
@@ -138,6 +153,7 @@ pdf-tools-suite/
 │   │   ├── split.js      # PDF splitting
 │   │   ├── excel.js      # PDF to Excel conversion
 │   │   ├── ppt.js        # PDF to PPT conversion
+│   │   ├── compress.js   # PDF compression
 │   │   └── annotate.js   # PDF annotation
 │   └── utils/            # Utility functions
 │       ├── pdfUtils.js        # PDF helper functions
@@ -165,6 +181,15 @@ pdf-tools-suite/
 * Loads the uploaded PDF using **PDF-Lib**
 * Creates separate PDFs for pages or ranges
 * Packages output using **JSZip**
+
+### PDF Compression
+
+* Renders every page to a canvas at the chosen DPI using **PDF.js**
+* Optionally converts the canvas to greyscale or thresholded black & white
+* Re-encodes each page as a JPEG and embeds it into a new PDF with **PDF-Lib**, keeping the original page dimensions
+* Saves with object streams enabled for a further size reduction
+* Compares the result against the source and keeps the original when compression does not help (safe mode)
+* Packages a multi-file batch into a ZIP using **JSZip**
 
 ### PDF → PPTX Conversion
 
@@ -202,6 +227,7 @@ pdf-tools-suite/
 
 * Password-protected or corrupted PDFs may fail to load
 * Very large PDFs may cause high memory usage in the browser
+* **Compression is lossy and rasterising:** output pages are images, so text is no longer selectable, searchable, or copyable, and already-optimised PDFs may not shrink at all (safe mode keeps the original in that case)
 * PowerPoint quality depends on screen resolution and rendering settings
 * **Excel conversion accuracy varies:**
   * Works best with simple, native PDFs with clear tabular data (85-95% accuracy)

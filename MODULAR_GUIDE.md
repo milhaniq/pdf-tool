@@ -27,6 +27,7 @@ js/
 │   ├── merge.js            # PDF merge
 │   ├── split.js            # PDF split
 │   ├── ppt.js              # PDF to PPT
+│   ├── compress.js         # PDF compression
 │   └── annotate.js         # PDF annotation
 └── README.md               # Module documentation
 
@@ -89,6 +90,7 @@ main.js (entry point)
 ├── modules/merge.js
 ├── modules/split.js
 ├── modules/ppt.js
+├── modules/compress.js
 └── modules/annotate.js
 ```
 
@@ -126,6 +128,7 @@ All features work exactly as before:
 ✅ **Merge PDFs** - Combine multiple PDF files
 ✅ **Split PDFs** - Split into pages or ranges
 ✅ **PDF to PPT** - Convert PDF to PowerPoint
+✅ **Compress PDFs** - Shrink PDFs by re-rendering pages as compressed images
 ✅ **Annotate PDFs** - Add text, shapes, highlights
 ✅ **Drag & Drop** - File upload and reordering
 ✅ **Client-Side Only** - No server required
